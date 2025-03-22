@@ -3060,7 +3060,8 @@ input, select, textarea {
 			}
 
 				.spotlight .image img {
-					width: 12em;
+					/* width: 12em; */
+					width: 18em;
 				}
 
 		}
