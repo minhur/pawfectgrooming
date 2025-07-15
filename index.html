@@ -174,26 +174,37 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 
-      <script>
-        (function() {
-          let attempts = 0;
-          const maxAttempts = 5;
+    
+<script>
+  (function() {
+    const observer = new MutationObserver(function(mutations, obs) {
+      for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType !== 1) continue;
 
-          function waitAndRemove() {
-            const el = document.querySelector('a[href^="https://elfsight.com"]');
-            if (el) {
-              el.remove();
-            } else if (attempts < maxAttempts) {
-              attempts++;
-              setTimeout(waitAndRemove, 500);
-            }
+          // Direct match
+          if (node.matches && node.matches('a[href^="https://elfsight.com"]')) {
+            setTimeout(() => node.remove(), 1000); // wait 1 second
+            obs.disconnect();
+            return;
           }
 
-          setTimeout(waitAndRemove, 200);
-        })();
-      </script>
+          // Check children
+          const match = node.querySelector?.('a[href^="https://elfsight.com"]');
+          if (match) {
+            setTimeout(() => match.remove(), 500); // wait 1 second
+            obs.disconnect();
+            return;
+          }
+        }
+      }
+    });
 
- 
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  })();
 </script>
 
 
