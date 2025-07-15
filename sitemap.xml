@@ -10,20 +10,20 @@
   </url>
 
   <!-- Booking Page -->
-  <url>
+  <!-- <url>
     <loc>https://booking.moego.pet/ol/landing?name=PawfectGrooming120661</loc>
     <lastmod>2025-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-  </url>
+  </url> -->
 
   <!-- Instagram (external, but optional to include if linked prominently) -->
-  <url>
+  <!-- <url>
     <loc>https://www.instagram.com/pawfectgrooming7</loc>
     <lastmod>2025-07-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
+  </url> -->
 
   <!-- Add additional pages if you expand (e.g., testimonials, FAQs, blog posts) -->
   <!--
@@ -33,6 +33,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  -->
   -->
 
 </urlset>
