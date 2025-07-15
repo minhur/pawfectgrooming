@@ -1,6 +1,14 @@
 @import url(fontawesome-all.min.css);
 @import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400';
 
+/* yelp widget */
+div.eapps-widget {
+	margin-bottom: 20px !important;
+}
+div.eapps-widget-toolbar {
+	display: none !important;
+}
+
 /*
 	Stellar by HTML5 UP
 	html5up.net | @ajlkn
