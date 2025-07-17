@@ -1,12 +1,7 @@
 <!DOCTYPE HTML>
-<!--
-	Stellar by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
+<html lang="en">
 	<head>
-		<title>Pawfect Grooming | Private Dog Grooming serving Bellevue, Seattle, and nearby areas</title>
+		<title>Private Dog Grooming in Bellevue — Serving Seattle Area | Pawfect Groomings</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta name="description" content="Private one-on-one dog grooming services in Bellevue, Seattle, and nearby areas. Certified professional providing stress-free, personalized grooming at a home-based dog spa." />
@@ -16,11 +11,12 @@
 		<meta property="og:url" content="https://pawfectgrooming.org/" />
 		<meta property="og:title" content="Pawfect Grooming | Private Dog Grooming serving Bellevue, Seattle, and nearby areas" />
 		<meta property="og:description" content="Certified, stress-free one-on-one dog grooming service based in Bellevue, WA. Serving Seattle, Bellevue, and nearby areas." />
-		<meta property="og:image" content="https://pawfectgrooming.org/images/home1.jpeg" />
+		<meta property="og:image" content="https://pawfectgrooming.org/images/pawfect.png" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="Pawfect Grooming | Private Dog Grooming serving Bellevue, Seattle, and nearby areas" />
 		<meta name="twitter:description" content="Home-based, certified dog grooming for a stress-free experience. Serving Bellevue, Seattle, and nearby areas." />
-		<meta name="twitter:image" content="https://pawfectgrooming.org/images/home1.jpeg" />
+		<meta name="twitter:image" content="https://pawfectgrooming.org/images/pawfect.png" />
+		<meta name="robots" content="index, follow">
 		<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="shortcut icon" href="/favicon.ico" />
@@ -29,184 +25,166 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 		<script type="application/ld+json">
-		{
-		  "@context": "https://schema.org",
-		  "@type": "LocalBusiness",
-		  "name": "Pawfect Grooming",
-		  "image": "https://pawfectgrooming.org/images/home1.jpeg",
-		  "@id": "https://pawfectgrooming.org",
-		  "url": "https://pawfectgrooming.org",
-		  "telephone": "+14255025135",
-		  "address": {
-			"@type": "PostalAddress",
-			"streetAddress": "161 131st Ave NE",
-			"addressLocality": "Bellevue",
-			"addressRegion": "WA",
-			"postalCode": "98005",
-			"addressCountry": "US"
-		  },
-		  "geo": {
-			"@type": "GeoCoordinates",
-			"latitude": 47.6126,
-			"longitude": -122.1661
-		  },
-		  "openingHoursSpecification": [
 			{
-			  "@type": "OpeningHoursSpecification",
-			  "dayOfWeek": [
-				"Monday",
-				"Tuesday",
-				"Wednesday",
-				"Thursday",
-				"Friday",
-				"Saturday"
-			  ],
-			  "opens": "09:00",
-			  "closes": "18:00"
+				"@id": "https://pawfectgrooming.org#business",
+				"@context": "https://schema.org",
+				"@type": "LocalBusiness",
+				"name": "Pawfect Grooming",
+				"image": "https://pawfectgrooming.org/images/pawfect.png",
+				"description": "Professional pet grooming services in Bellevue, WA. Serving dogs and cats with love and care within a 20‑mile radius.",
+				"url": "https://pawfectgrooming.org",
+				"telephone": "(425) 502-5135",
+				"priceRange": "$80–$155+",
+				"email": "pawfectgrooming7@gmail.com",
+				"address": {
+					"@type": "PostalAddress",
+					"streetAddress": "161 131st Ave NE",
+					"addressLocality": "Bellevue",
+					"addressRegion": "WA",
+					"postalCode": "98005",
+					"addressCountry": "US"
+				},
+				"geo": {
+					"@type": "GeoCoordinates",
+					"latitude": 47.6180,
+					"longitude": -122.2015
+				},
+				"serviceArea": {
+					"@type": "GeoCircle",
+					"geoMidpoint": {
+					"@type": "GeoCoordinates",
+					"latitude": 47.6180,
+					"longitude": -122.2015
+					},
+					"geoRadius": 32186.9
+				},
+				"areaServed": [
+					{ "@type": "Place", "name": "Seattle, WA" },
+					{ "@type": "Place", "name": "Bellevue, WA" },
+					{ "@type": "Place", "name": "Redmond, WA" },
+					{ "@type": "Place", "name": "Kirkland, WA" },
+					{ "@type": "Place", "name": "Mercer Island, WA" },
+					{ "@type": "Place", "name": "Issaquah, WA" },
+					{ "@type": "Place", "name": "Sammamish, WA" },
+					{ "@type": "Place", "name": "Bothell, WA" },
+					{ "@type": "Place", "name": "Woodinville, WA" },
+					{ "@type": "Place", "name": "Lynnwood, WA" }
+				],
+				"openingHoursSpecification": [
+					{
+					"@type": "OpeningHoursSpecification",
+					"dayOfWeek": [
+						"Monday","Tuesday","Wednesday",
+						"Thursday","Friday","Saturday","Sunday"
+					],
+					"opens": "09:00",
+					"closes": "19:00"
+					}
+				],
+				"sameAs": [
+					"https://www.instagram.com/pawfectgrooming7",
+					"https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+				],
+				"potentialAction": {
+					"@type": "ReserveAction",
+					"target": {
+					"@type": "EntryPoint",
+					"urlTemplate": "https://booking.moego.pet/ol/landing?name=PawfectGrooming120661",
+					"actionPlatform": [
+						"http://schema.org/OnlineBooking",
+						"https://schema.org/OnlineBooking"
+					]
+					},
+					"result": {
+					"@type": "Reservation",
+					"name": "Pawfect Grooming appointment"
+					}
+				}
 			}
-		  ],
-		  "sameAs": [
-			"https://www.instagram.com/pawfectgrooming7"
-		  ]
-		}
+		</script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-D6GTR322LR"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-D6GTR322LR');
 		</script>
 	</head>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-D6GTR322LR"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', 'G-D6GTR322LR');
-	</script>
 	<body class="is-preload">
 
-		<!-- Wrapper -->
-			<div id="wrapper">
-
-				<!-- Header -->
-					<header id="header" class="alt">
-						<span class="logo">
-							<img src="images/pawfect.png" alt="" />
-						</span>
-					</header>
-
-				<!-- Main -->
-					<div id="main">
-
-						<!-- Introduction -->
-							<section id="intro" class="main">
-								<div class="spotlight">
-									<div class="content">
-										<behold-widget feed-id="4YkblIjTZgaMwfU7TBvM"></behold-widget>
-										<script>
-										(() => {
-											const d=document,s=d.createElement("script");s.type="module";
-											s.src="https://w.behold.so/widget.js";d.head.append(s);
-										})();
-										</script>
-									</div>
-								</div>
-							</section>
-
-						<!-- Get Started -->
-							<section id="cta" class="main special">
-								<header class="major">
-									<h2>No Stress, One-on-One Dog Grooming in a Private Home Studio</h2>
-								</header>
-								<div class="spotlight">
-									<span class="image"><img src="images/home1.jpeg" alt="" /></span>
-									<span class="image"><img src="images/home2.jpeg" alt="" /></span>
-									<span class="image"><img src="images/home3.jpeg" alt="" /></span>
-								</div>
-								<div class="main" style="text-align: left">
-									<p>Pawfact Grooming is a single-member, private one-on-one home-based dog spa serving Bellevue, Seattle, and nearby areas. We prioritize your dog’s comfort and safety while providing personalized grooming services tailored to each individual.</p>
-									<p>With a gentle and loving approach, I strive to create a stress-free environment where your dog can feel completely at ease. To enhance relaxation, all grooming sessions are conducted with soothing music in the background.</p>
-									<p>At Pawfact Grooming, every dog receives premium-quality shampoos, ensuring the best care for their coat. During drying, dogs wear a Happy Hood to reduce noise and promote calmness. Grooming sessions are conducted with patience and precision, typically lasting up to 2 hours for dogs weighing up to 45 lbs and up to 3 hours for dogs weighing up to 80 lbs, depending on the breed.</p>
-									<p>I am proud to have completed the <a href="https://www.akc.org/products-services/akc-safe-grooming-program/" target="_blank">AKC S.A.F.E. Grooming Program</a> and hold a Professional Pet Groomer Certification, reflecting my commitment to the highest standards of pet care.</p>
-
-						                  	<!-- Elfsight Yelp Reviews | Untitled Yelp Reviews -->
-						                	<script src="https://static.elfsight.com/platform/platform.js" async></script>
-						        		<div class="elfsight-app-a7b596db-5c84-43fd-a6b5-18309ee4c936" data-elfsight-app-lazy></div>
-								</div>
-								<footer class="major" style="margin-top: 20px;">
-									<ul class="actions special">
-										<li><a href="https://booking.moego.pet/ol/landing?name=PawfectGrooming120661" class="button primary">Check Prices</a></li>
-										<li>
-											<a href="https://www.instagram.com/pawfectgrooming7" class="button" target="_blank">
-												<i class="icon brands fa-instagram-square"></i>
-												Instagram: pawfectgrooming7
-											</a>
-										</li>
-									</ul>
-								</footer>                
-							</section>
-
+		<div id="wrapper">
+			<header id="header" class="alt">
+				<span class="logo">
+					<img src="images/pawfect.png" alt="Pawfect Grooming logo" />
+				</span>
+			</header>
+			<div id="main">
+				<section id="intro" class="main">
+					<div class="spotlight">
+						<div class="content">
+							<behold-widget feed-id="4YkblIjTZgaMwfU7TBvM"></behold-widget>
+							<script>
+							(() => {
+								const d=document,s=d.createElement("script");s.type="module";
+								s.src="https://w.behold.so/widget.js";d.head.append(s);
+							})();
+							</script>
+						</div>
 					</div>
-
-				<!-- Footer -->
-					<footer id="footer">
-						<section>
-							<h2>Pawfect Grooming</h2>
-							<dl class="alt">
-								<dt>Address</dt>
-								<dd>161 131st Ave NE &bull; Bellevue, WA 98005</dd>
-								<dt>Phone</dt>
-								<dd>(425) 502-5135</dd>
-								<dt>Email</dt>
-								<dd><a href="mailto:pawfectgrooming7@gmail.com">pawfectgrooming7@gmail.com</a></dd>
-								<dt>Instagram</dt>
-								<dd><a href="https://www.instagram.com/pawfectgrooming7">pawfectgrooming7</a></dd>
-							</dl>
-						</section>
-					</footer>
-
+				</section>
+				<section id="cta" class="main special">
+					<header class="major">
+						<h2>No Stress, One-on-One Dog Grooming in a Private Home Studio</h2>
+					</header>
+					<div class="spotlight">
+						<span class="image"><img src="images/home1.jpeg" alt="Photo of our private grooming area" /></span>
+						<span class="image"><img src="images/home2.jpeg" alt="Photo of our private shower area" /></span>
+						<span class="image"><img src="images/home3.jpeg" alt="Photo of premium quality items we use" /></span>
+					</div>
+					<div class="main" style="text-align: left">
+						<p>Pawfact Grooming is a single-member, private one-on-one home-based dog spa serving Bellevue, Seattle, and nearby areas. We prioritize your dog’s comfort and safety while providing personalized grooming services tailored to each individual.</p>
+						<p>With a gentle and loving approach, I strive to create a stress-free environment where your dog can feel completely at ease. To enhance relaxation, all grooming sessions are conducted with soothing music in the background.</p>
+						<p>At Pawfact Grooming, every dog receives premium-quality shampoos, ensuring the best care for their coat. During drying, dogs wear a Happy Hood to reduce noise and promote calmness. Grooming sessions are conducted with patience and precision, typically lasting up to 2 hours for dogs weighing up to 45 lbs and up to 3 hours for dogs weighing up to 80 lbs, depending on the breed.</p>
+						<p>I am proud to have completed the <a href="https://www.akc.org/products-services/akc-safe-grooming-program/" target="_blank">AKC S.A.F.E. Grooming Program</a> and hold a Professional Pet Groomer Certification, reflecting my commitment to the highest standards of pet care.</p>
+						<!-- Elfsight Yelp Reviews | Untitled Yelp Reviews -->
+						<script src="https://static.elfsight.com/platform/platform.js" async></script>
+						<div class="elfsight-app-a7b596db-5c84-43fd-a6b5-18309ee4c936" data-elfsight-app-lazy></div>
+					</div>
+					<footer class="major" style="margin-top: 20px;">
+						<ul class="actions special">
+							<li><a href="https://booking.moego.pet/ol/landing?name=PawfectGrooming120661" class="button primary">Check Prices</a></li>
+							<li>
+								<a href="https://www.instagram.com/pawfectgrooming7" class="button" target="_blank">
+									<i class="icon brands fa-instagram-square"></i>
+									Instagram: pawfectgrooming7
+								</a>
+							</li>
+						</ul>
+					</footer>                
+				</section>
 			</div>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-    
-<script>
-	/*
-  (function() {
-    const observer = new MutationObserver(function(mutations, obs) {
-      for (const mutation of mutations) {
-        for (const node of mutation.addedNodes) {
-          if (node.nodeType !== 1) continue;
-
-          // Direct match
-          if (node.matches && node.matches('a[href^="https://elfsight.com"]')) {
-            setTimeout(() => node.remove(), 1000); // wait 1 second
-            obs.disconnect();
-            return;
-          }
-
-          // Check children
-          const match = node.querySelector?.('a[href^="https://elfsight.com"]');
-          if (match) {
-            setTimeout(() => match.remove(), 500); // wait 1 second
-            obs.disconnect();
-            return;
-          }
-        }
-      }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  })();
-  */
-</script>
-
-
+			<footer id="footer">
+				<section>
+					<h2>Pawfect Grooming</h2>
+					<dl class="alt">
+						<dt>Address</dt>
+						<dd>161 131st Ave NE &bull; Bellevue, WA 98005</dd>
+						<dt>Phone</dt>
+						<dd>(425) 502-5135</dd>
+						<dt>Email</dt>
+						<dd><a href="mailto:pawfectgrooming7@gmail.com">pawfectgrooming7@gmail.com</a></dd>
+						<dt>Instagram</dt>
+						<dd><a href="https://www.instagram.com/pawfectgrooming7">pawfectgrooming7</a></dd>
+					</dl>
+				</section>
+			</footer>
+		</div>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
 	</body>
 </html>
