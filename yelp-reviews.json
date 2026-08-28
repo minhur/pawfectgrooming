@@ -1,0 +1,49 @@
+{
+  "business": {
+    "name": "Pawfect Grooming",
+    "rating": 4.9,
+    "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
+    "review_count": 31,
+    "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+    "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ"
+  },
+  "fetched_at": "2026-08-28",
+  "source": "yelp via yahoo local syndication",
+  "reviews": [
+    {
+      "author": "Debbie P.",
+      "rating": 5,
+      "date": "2026-08-21",
+      "text": "Mira did a fabulous job with Miss M! She gave a great Cavalier cut for the summer and kept the signature feathering Cavaliers are known for. I like that she only takes one client at a time and...",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2?hrid=KXjI60Kf8wIIM3dYNipbyA"
+    },
+    {
+      "author": "Joenghee S.",
+      "rating": 5,
+      "date": "2026-08-03",
+      "text": "Ellie has been coming to this grooming salon since she was a puppy. The groomer always takes such wonderful care of her, which is why we continue to come here even though it's a bit of a drive. We...",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2?hrid=Oz4GhP6trckVUiLi7D58fQ"
+    },
+    {
+      "author": "Christina J.",
+      "rating": 5,
+      "date": "2026-07-17",
+      "text": "My dog hates grooming and is always scared when I drop him off. Pawfect Grooming is the exception. Mira is so gentle and loving with him. I love the one to one care and the fact he never has...",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2?hrid=XoKH9aN97zXcBTiZMDGKKg"
+    },
+    {
+      "author": "Zilai F.",
+      "rating": 5,
+      "date": "2026-06-09",
+      "text": "We've been going to Pawfect Grooming for over a year now, and Mira has been amazing every time. She's friendly, professional, fast, and always punctual, which I really appreciate. Nellie always...",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2?hrid=95-g4fXoMFz5NXfP4IQU4w"
+    },
+    {
+      "author": "Eddie A.",
+      "rating": 5,
+      "date": "2026-05-10",
+      "text": "We're new to the area and couldn't be happier that we found such a well-qualified and attentive groomer for our French bulldog puppy! Mira provides a very welcoming environment that is perfectly...",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2?hrid=x3W38JKkTNHPrvAPiSA9iA"
+    }
+  ]
+}
