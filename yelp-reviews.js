@@ -44,10 +44,11 @@
     ".yrw-stars{display:flex;gap:0;margin:12px 0 10px;line-height:0}",
     ".yrw-stars svg{width:18px;height:18px;fill:var(--yrw-star);stroke:var(--yrw-star);stroke-width:2.4;stroke-linejoin:round;margin-right:1px}",
     ".yrw-stars svg.off{fill:#dcdcdc}",
-    /* review text: clamped, gray */
+    /* review text: clamped, gray; max-height drives the expand animation */
     ".yrw-text{font-size:.84em;line-height:1.5;color:var(--yrw-text);margin:0;width:100%;",
-    "  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}",
-    ".yrw-card.open .yrw-text{display:block;-webkit-line-clamp:unset;overflow:visible}",
+    "  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;",
+    "  max-height:4.5em;transition:max-height .35s ease}",
+    ".yrw-card.open .yrw-text{-webkit-line-clamp:unset}",
     /* inline expander (matches es-text-shortener-control) */
     ".yrw-more{all:unset;box-sizing:border-box;margin-top:8px;font-size:.78em;color:var(--yrw-mut);cursor:pointer;font-family:inherit;line-height:1.4;display:none;border:0;text-decoration:none}",
     ".yrw-more.show{display:inline-block}",
@@ -60,11 +61,15 @@
     ".yrw-arrow[data-hidden=\"1\"]{display:none}",
     ".yrw-prev{left:-12px}.yrw-next{right:-12px}",
     "@media (max-width:560px){.yrw-prev{left:-6px}.yrw-next{right:-6px}}",
-    /* bullets */
-    ".yrw-dots{display:flex;justify-content:center;gap:6px;margin-top:14px}",
-    ".yrw-dot{all:unset;box-sizing:border-box;display:inline-block;width:7px;height:7px;border-radius:50%;",
-    "  background:#d3d3d3;cursor:pointer}",
-    ".yrw-dot.on{background:#7a7a7a}"
+    /* bullets: sliding dynamic window (swiper-style), scales to any count */
+    ".yrw-dots{display:flex;justify-content:center;margin-top:14px}",
+    ".yrw-dots-vp{overflow:hidden}",
+    ".yrw-dots-strip{display:flex;gap:6px;transition:transform .3s ease}",
+    ".yrw-dot{all:unset;box-sizing:border-box;display:inline-block;flex:0 0 7px;width:7px;height:7px;",
+    "  border-radius:50%;background:#d3d3d3;cursor:pointer;transition:transform .3s ease,background .3s ease;",
+    "  transform:scale(.7)}",
+    ".yrw-dot.near{transform:scale(.85)}",
+    ".yrw-dot.on{background:#7a7a7a;transform:scale(1.15)}"
   ].join("\n");
 
   function el(tag, cls, text) {
@@ -178,35 +183,62 @@
       card.appendChild(txt);
 
       var more = el("div", "yrw-more", "Read more");
-      btnize(more, null, function () {
-        var open = card.classList.toggle("open");
-        more.textContent = open ? "Show less" : "Read more";
-      });
+      btnize(more, null, function () { setOpen(card, !card.classList.contains("open")); });
       card.appendChild(more);
 
       track.appendChild(card);
     });
     body.appendChild(track);
 
+    function setOpen(card, open) {
+      var t = card.querySelector(".yrw-text");
+      var m = card.querySelector(".yrw-more");
+      if (!t || !m) return;
+      if (open) {
+        card.classList.add("open");
+        t.style.maxHeight = t.scrollHeight + "px";
+        m.textContent = "Show less";
+      } else {
+        t.style.maxHeight = "";
+        m.textContent = "Read more";
+        // keep text unclamped while the height animates down, then re-clamp
+        clearTimeout(card._reclamp);
+        card._reclamp = setTimeout(function () { card.classList.remove("open"); }, 360);
+      }
+    }
+    function collapseAll() {
+      Array.prototype.forEach.call(track.querySelectorAll(".yrw-card.open"), function (c) {
+        setOpen(c, false);
+      });
+    }
+
     var prev = el("div", "yrw-arrow yrw-prev");
     var next = el("div", "yrw-arrow yrw-next");
-    btnize(prev, "Previous reviews", function () { track.scrollBy({ left: -cardStep() }); });
-    btnize(next, "Next reviews", function () { track.scrollBy({ left: cardStep() }); });
+    btnize(prev, "Previous reviews", function () { collapseAll(); track.scrollBy({ left: -cardStep() }); });
+    btnize(next, "Next reviews", function () { collapseAll(); track.scrollBy({ left: cardStep() }); });
     prev.appendChild(svg("0 0 22 22", CHEV_L));
     next.appendChild(svg("0 0 22 22", CHEV_R));
     body.appendChild(prev);
     body.appendChild(next);
     root.appendChild(body);
 
+    var DOT_W = 13;          // 7px dot + 6px gap
+    var DOT_WINDOW = 7;      // visible dots
     var dots = el("div", "yrw-dots");
+    var dotsVp = el("div", "yrw-dots-vp");
+    var strip = el("div", "yrw-dots-strip");
     reviews.forEach(function (_, i) {
       var d = el("div", "yrw-dot");
       btnize(d, "Go to review " + (i + 1), function () {
+        collapseAll();
         var card = track.children[i];
         if (card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft });
       });
-      dots.appendChild(d);
+      strip.appendChild(d);
     });
+    dotsVp.style.width = Math.min(reviews.length, DOT_WINDOW) * DOT_W - 6 + "px";
+    dotsVp.appendChild(strip);
+    dots.appendChild(dotsVp);
     root.appendChild(dots);
 
     function cardStep() {
@@ -226,13 +258,17 @@
         var noScroll = max <= 4;
         prev.setAttribute("data-hidden", (noScroll || track.scrollLeft <= 2) ? "1" : "0");
         next.setAttribute("data-hidden", (noScroll || track.scrollLeft >= max - 2) ? "1" : "0");
-        // dot-per-review stops scaling past a dozen reviews — arrows/swipe only
-        dots.style.display = (noScroll || reviews.length > 12) ? "none" : "flex";
+        dots.style.display = noScroll ? "none" : "flex";
         var step = cardStep() || 1;
         var idx = Math.round(track.scrollLeft / step);
-        Array.prototype.forEach.call(dots.children, function (d, i) {
+        Array.prototype.forEach.call(strip.children, function (d, i) {
           d.classList.toggle("on", i === idx);
+          d.classList.toggle("near", Math.abs(i - idx) === 1);
         });
+        // slide the strip so the active dot stays centered in the window
+        var maxShift = Math.max(0, strip.children.length - DOT_WINDOW) * DOT_W;
+        var shift = Math.min(maxShift, Math.max(0, (idx - (DOT_WINDOW - 1) / 2) * DOT_W));
+        strip.style.transform = "translateX(" + (-shift) + "px)";
         // show Read more only when the text is actually clamped
         Array.prototype.forEach.call(track.children, function (card) {
           var t = card.querySelector(".yrw-text");
