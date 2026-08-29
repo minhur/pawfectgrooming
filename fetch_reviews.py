@@ -1,18 +1,27 @@
 #!/usr/bin/env python3
-"""Refresh yelp-reviews.json from the business's Yahoo Local page.
+"""Refresh yelp-reviews.json for the self-hosted reviews widget.
 
-Yahoo Local syndicates Yelp review data (rating, count, 5 most recent review
-excerpts with Yelp permalinks) and — unlike yelp.com — serves it to
-datacenter IPs. This avoids both Elfsight and Yelp's paid Fusion API.
+Two data sources:
 
-Usage:
-    python3 fetch_reviews.py [--out yelp-reviews.json] [--html cached.html]
+  --serpapi KEY   Full pull via SerpAPI's Yelp Reviews engine
+                  (https://serpapi.com/yelp-reviews-api). Fetches ALL
+                  recommended reviews (num=49 covers this business in one
+                  call) plus Yelp's hidden "not recommended" reviews via
+                  not_recommended=true. Full texts, real per-review ratings,
+                  avatar URLs. ~3 searches per refresh (free plan is fine).
 
-Notes:
-  - Per-review star ratings are not exposed in the Yahoo markup; reviews
-    default to 5 stars (this business is 30/31 five-star). Edit the JSON by
-    hand if a non-5-star review ever surfaces in the excerpt list.
-  - Best-effort parser; if Yahoo changes markup, edit the JSON manually.
+  (default)       Yahoo Local syndication — keyless fallback. Carries the
+                  5 most-recent review excerpts + rating/count. Serves
+                  datacenter IPs, unlike yelp.com.
+
+Guards (both modes):
+  - Rating honesty: the official yelp.com rating, once set in the JSON,
+    wins over any source that disagrees (Yahoo rounds 4.9 -> 5.0).
+    Override with --rating or --trust-syndication.
+  - Merge: never downgrade existing data. Full texts, avatars, real
+    ratings, and reviews absent from the current source window are kept.
+  - Positivity filter: only reviews with rating >= --min-rating (default 4)
+    are written for display; the site is a testimonial wall, not a mirror.
 """
 import argparse
 import datetime
@@ -20,26 +29,110 @@ import html
 import json
 import re
 import sys
+import urllib.parse
 import urllib.request
 
+PLACE_ID = "IDhGAtyq6X7eYqP5ThIDqQ"
 YAHOO_URL = "https://local.yahoo.com/info-239038745-pawfect-grooming-bellevue/"
 BIZ = {
     "name": "Pawfect Grooming",
     "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
-    "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
+    "write_review_url": "https://www.yelp.com/writeareview/biz/" + PLACE_ID,
 }
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
 
 
-def fetch(url: str) -> str:
+def http_get(url: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.urlopen(req, timeout=60) as r:
         return r.read().decode("utf-8", errors="ignore")
 
 
-def parse(page: str) -> dict:
-    # Overall rating + count: rendered near the Yelp attribution link.
+# ---------------------------------------------------------------- serpapi
+
+def parse_serpapi_date(raw: str) -> str:
+    """Recommended reviews use ISO ('2024-01-08T01:49:24Z'); the
+    not_recommended feed uses M/D/YYYY ('11/30/2024')."""
+    if not raw:
+        return ""
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})", raw)
+    if m:
+        return f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+    m = re.match(r"(\d{1,2})/(\d{1,2})/(\d{4})", raw)
+    if m:
+        return f"{m.group(3)}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
+    return raw
+
+
+def map_serpapi_review(r: dict, hidden: bool) -> dict:
+    user = r.get("user") or {}
+    comment = r.get("comment") or {}
+    thumb = user.get("thumbnail") or ""
+    out = {
+        "author": user.get("name", "Yelp user").strip(),
+        "rating": r.get("rating", 5),
+        "date": parse_serpapi_date(r.get("date", "")),
+        "text": (comment.get("text") or "").strip(),
+        "url": BIZ["url"],
+    }
+    # Yelp's gray default-avatar assets are not real photos; let the widget
+    # render its silhouette instead.
+    if thumb and "default_avatar" not in thumb and "/assets/" not in thumb:
+        out["avatar"] = thumb
+    if hidden:
+        out["hidden_by_yelp"] = True
+    return out
+
+
+def fetch_serpapi(api_key: str) -> list:
+    def call(params: dict) -> dict:
+        params = dict(params, engine="yelp_reviews", place_id=PLACE_ID,
+                      api_key=api_key, output="json")
+        url = "https://serpapi.com/search.json?" + urllib.parse.urlencode(params)
+        data = json.loads(http_get(url))
+        if data.get("search_metadata", {}).get("status") == "Error" or data.get("error"):
+            raise SystemExit("serpapi error: " + str(data.get("error", data)))
+        return data
+
+    reviews = []
+    # recommended: num=49 max; paginate defensively in case count grows
+    start = 0
+    while True:
+        page = call({"num": 49, "start": start, "sortby": "date_desc"})
+        batch = page.get("reviews", [])
+        reviews += [map_serpapi_review(r, hidden=False) for r in batch]
+        if not (page.get("serpapi_pagination") or {}).get("next") or not batch:
+            break
+        start += len(batch)
+        if start > 300:  # sanity ceiling
+            break
+    total = None
+    try:
+        total = page["search_information"]["total_results"]
+    except (KeyError, TypeError):
+        pass
+
+    # hidden ("not currently recommended"): 10 per page
+    nr_start = 0
+    while True:
+        page = call({"not_recommended": "true", "not_recommended_start": nr_start})
+        batch = page.get("reviews", [])
+        reviews += [map_serpapi_review(r, hidden=True) for r in batch]
+        if not (page.get("serpapi_pagination") or {}).get("next") or not batch:
+            break
+        nr_start += len(batch)
+        if nr_start > 200:
+            break
+
+    print(f"serpapi: {len(reviews)} reviews fetched "
+          f"(recommended total per yelp: {total})")
+    return reviews, total
+
+
+# ----------------------------------------------------------------- yahoo
+
+def parse_yahoo(page: str):
     rating = None
     count = None
     m = re.search(r">(\d\.\d)<", page)
@@ -48,9 +141,6 @@ def parse(page: str) -> dict:
     m = re.search(r">(\d+)\s*reviews?<", page)
     if m:
         count = int(m.group(1))
-
-    # Review blocks: <span ...>NAME</span><span ...>MM/DD/YY</span> ...
-    # <p class="line-clamp-3">TEXT</p> ... hrid=XXXX
     rx = re.compile(
         r'text-muted">([^<]{2,40})</span>'
         r'<span[^>]*text-muted">(\d{2}/\d{2}/\d{2})</span>'
@@ -65,103 +155,141 @@ def parse(page: str) -> dict:
             continue
         seen.add(hrid)
         mm, dd, yy = date_us.split("/")
-        iso = f"20{yy}-{mm}-{dd}"
         clean = html.unescape(re.sub(r"<[^>]+>", "", text)).strip()
         reviews.append({
             "author": html.unescape(name).strip(),
-            "rating": 5,  # not exposed by source; see module docstring
-            "date": iso,
+            "rating": 5,  # yahoo hides per-review stars; business is 30/31 5-star
+            "date": f"20{yy}-{mm}-{dd}",
             "text": clean,
             "url": f"{BIZ['url']}?hrid={hrid}",
         })
-
     if not reviews:
-        raise SystemExit("parser found no reviews — Yahoo markup changed; "
-                         "update the regex or edit the JSON manually")
+        raise SystemExit("yahoo parser found no reviews — markup changed; "
+                         "update the regex or use --serpapi")
+    return reviews, rating, count
 
-    reviews.sort(key=lambda r: r["date"], reverse=True)
-    return {
-        "business": {
-            **BIZ,
-            "rating": rating if rating is not None else 5.0,
-            "review_count": count if count is not None else len(reviews),
-        },
-        "fetched_at": datetime.date.today().isoformat(),
-        "source": "yelp via yahoo local syndication",
-        "reviews": reviews,
-    }
 
+# ----------------------------------------------------------------- merge
+
+def review_key(r: dict):
+    m = re.search(r"hrid=([A-Za-z0-9_-]+)", r.get("url", ""))
+    if m:
+        return ("hrid", m.group(1))
+    return ("authdate", r.get("author", ""), r.get("date", ""))
+
+
+def merge(prev_reviews: list, new_reviews: list) -> list:
+    """New data wins on text-length and presence; nothing existing is lost."""
+    by_key = {}
+    by_authdate = {}
+    for pr in prev_reviews:
+        by_key[review_key(pr)] = pr
+        by_authdate[(pr.get("author"), pr.get("date"))] = pr
+    out = []
+    matched = set()
+    for r in new_reviews:
+        old = by_key.get(review_key(r)) or by_authdate.get((r.get("author"), r.get("date")))
+        if old:
+            matched.add(id(old))
+            keep = dict(old)
+            if len(r.get("text", "")) > len(keep.get("text", "")):
+                keep["text"] = r["text"]
+            for k in ("avatar", "rating", "date", "hidden_by_yelp"):
+                if r.get(k) is not None:
+                    keep[k] = r[k]
+            # a review-level permalink (hrid) is better than the biz url
+            if "hrid=" in old.get("url", "") and "hrid=" not in r.get("url", ""):
+                keep["url"] = old["url"]
+            elif "hrid=" in r.get("url", ""):
+                keep["url"] = r["url"]
+            out.append(keep)
+        else:
+            out.append(r)
+    for pr in prev_reviews:
+        if id(pr) not in matched:
+            out.append(pr)
+    # de-dup in case a review matched twice
+    seen, dedup = set(), []
+    for r in out:
+        k = review_key(r)
+        if k in seen:
+            continue
+        seen.add(k)
+        dedup.append(r)
+    dedup.sort(key=lambda r: r.get("date", ""), reverse=True)
+    return dedup
+
+
+# ------------------------------------------------------------------ main
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="yelp-reviews.json")
-    ap.add_argument("--html", help="parse a saved HTML file instead of fetching")
+    ap.add_argument("--serpapi", metavar="API_KEY",
+                    help="full pull (all recommended + hidden reviews) via SerpAPI")
+    ap.add_argument("--html", help="parse a saved Yahoo Local HTML file")
+    ap.add_argument("--min-rating", type=int, default=4,
+                    help="only keep reviews rated >= this (default 4)")
     ap.add_argument("--rating", type=float,
-                    help="official yelp.com rating (canonical; syndication may round, "
-                         "e.g. shows 5.0 when Yelp shows 4.9)")
+                    help="official yelp.com overall rating (canonical)")
     ap.add_argument("--trust-syndication", action="store_true",
-                    help="accept the syndicated rating even if it differs from the existing file")
+                    help="accept a syndicated overall rating that differs from the existing file")
     args = ap.parse_args()
 
-    prev = None
+    prev = {}
     try:
         with open(args.out) as f:
             prev = json.load(f)
     except (OSError, ValueError):
         pass
+    prev_reviews = prev.get("reviews", [])
+    prev_biz = prev.get("business", {})
 
-    page = open(args.html, errors="ignore").read() if args.html else fetch(YAHOO_URL)
-    data = parse(page)
+    rating = count = None
+    if args.serpapi:
+        new_reviews, count = fetch_serpapi(args.serpapi)
+        source = "serpapi yelp_reviews (full texts, real ratings, incl. hidden)"
+    else:
+        page = open(args.html, errors="ignore").read() if args.html else http_get(YAHOO_URL)
+        new_reviews, rating, count = parse_yahoo(page)
+        source = "yelp via yahoo local syndication"
 
-    # Merge guard: never downgrade an existing review's data. The widget JSON
-    # may hold FULL texts and avatar URLs captured from the live widget DOM;
-    # syndication only has ~160-char excerpts and no avatars. Match by hrid.
-    if prev:
-        by_hrid = {}
-        for pr in prev.get("reviews", []):
-            m = re.search(r"hrid=([A-Za-z0-9_-]+)", pr.get("url", ""))
-            if m:
-                by_hrid[m.group(1)] = pr
-        for r in data["reviews"]:
-            m = re.search(r"hrid=([A-Za-z0-9_-]+)", r["url"])
-            old_r = by_hrid.get(m.group(1)) if m else None
-            if not old_r:
-                continue
-            if len(old_r.get("text", "")) > len(r.get("text", "")):
-                r["text"] = old_r["text"]
-            for k in ("avatar", "rating", "date"):
-                if old_r.get(k) is not None:
-                    r[k] = old_r[k]
-        # keep reviews that exist locally but fell out of the syndication window
-        have = {re.search(r"hrid=([A-Za-z0-9_-]+)", r["url"]).group(1) for r in data["reviews"]}
-        for h, pr in by_hrid.items():
-            if h not in have:
-                data["reviews"].append(pr)
-        data["reviews"].sort(key=lambda r: r["date"], reverse=True)
+    reviews = merge(prev_reviews, new_reviews)
+    dropped = [r for r in reviews if r.get("rating", 5) < args.min_rating]
+    reviews = [r for r in reviews if r.get("rating", 5) >= args.min_rating]
+    if dropped:
+        print(f"filtered {len(dropped)} review(s) below {args.min_rating} stars "
+              f"({', '.join(d['author'] for d in dropped)})")
 
-    # Rating honesty guard: never display a rating that overstates yelp.com.
-    # Syndication rounds (Yahoo showed 5.0 while yelp.com showed 4.9), so the
-    # official rating, once set, wins over the syndicated one.
+    biz = dict(BIZ)
     today = datetime.date.today().isoformat()
+    # Overall-rating honesty guard: official yelp.com number wins.
+    old_rating = prev_biz.get("rating")
     if args.rating is not None:
-        data["business"]["rating"] = args.rating
-        data["business"]["rating_source"] = f"yelp.com official (manual, {today})"
-    elif prev and not args.trust_syndication:
-        pb = prev.get("business", {})
-        old = pb.get("rating")
-        new = data["business"]["rating"]
-        if old is not None and abs(old - new) > 0.01:
-            print(f"WARNING: syndication shows {new} but keeping existing {old} "
-                  f"(official yelp.com rating wins; use --rating or --trust-syndication to change)")
-            data["business"]["rating"] = old
-            data["business"]["rating_source"] = pb.get("rating_source", "existing file (official)")
+        biz["rating"] = args.rating
+        biz["rating_source"] = f"yelp.com official (manual, {today})"
+    elif old_rating is not None:
+        if rating is not None and abs(old_rating - rating) > 0.01 and not args.trust_syndication:
+            print(f"WARNING: source shows {rating} but keeping existing {old_rating} "
+                  f"(official yelp.com rating wins; use --rating or --trust-syndication)")
+        biz["rating"] = old_rating
+        biz["rating_source"] = prev_biz.get("rating_source", "existing file (official)")
+    else:
+        biz["rating"] = rating if rating is not None else 5.0
+    biz["review_count"] = count if count is not None else prev_biz.get("review_count", len(reviews))
 
+    data = {
+        "business": biz,
+        "fetched_at": today,
+        "source": source,
+        "reviews": reviews,
+    }
     with open(args.out, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         f.write("\n")
-    b = data["business"]
-    print(f"wrote {args.out}: {b['rating']} stars, {b['review_count']} reviews, "
-          f"{len(data['reviews'])} excerpts")
+    hidden_n = sum(1 for r in reviews if r.get("hidden_by_yelp"))
+    print(f"wrote {args.out}: {biz['rating']} stars, {biz['review_count']} reviews on yelp, "
+          f"{len(reviews)} displayed ({hidden_n} from the hidden section)")
     return 0
 
 
