@@ -226,7 +226,8 @@
         var noScroll = max <= 4;
         prev.setAttribute("data-hidden", (noScroll || track.scrollLeft <= 2) ? "1" : "0");
         next.setAttribute("data-hidden", (noScroll || track.scrollLeft >= max - 2) ? "1" : "0");
-        dots.style.display = noScroll ? "none" : "flex";
+        // dot-per-review stops scaling past a dozen reviews — arrows/swipe only
+        dots.style.display = (noScroll || reviews.length > 12) ? "none" : "flex";
         var step = cardStep() || 1;
         var idx = Math.round(track.scrollLeft / step);
         Array.prototype.forEach.call(dots.children, function (d, i) {

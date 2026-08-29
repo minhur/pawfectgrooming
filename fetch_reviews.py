@@ -86,20 +86,27 @@ def map_serpapi_review(r: dict, hidden: bool) -> dict:
 
 
 def fetch_serpapi(api_key: str) -> list:
+    NO_RESULTS = "hasn't returned any results"
+
     def call(params: dict) -> dict:
         params = dict(params, engine="yelp_reviews", place_id=PLACE_ID,
                       api_key=api_key, output="json")
         url = "https://serpapi.com/search.json?" + urllib.parse.urlencode(params)
         data = json.loads(http_get(url))
-        if data.get("search_metadata", {}).get("status") == "Error" or data.get("error"):
-            raise SystemExit("serpapi error: " + str(data.get("error", data)))
+        err = data.get("error") or ""
+        if NO_RESULTS in err:
+            return data  # empty result set (e.g. no hidden reviews) — not fatal
+        if data.get("search_metadata", {}).get("status") == "Error" or err:
+            raise SystemExit("serpapi error: " + str(err or data))
         return data
 
     reviews = []
-    # recommended: num=49 max; paginate defensively in case count grows
+    # recommended — minimal params only: adding num/sortby made the API return
+    # "no results" for this place (verified live 2026-08-29). One page carries
+    # up to 49 reviews; paginate defensively in case the count grows.
     start = 0
     while True:
-        page = call({"num": 49, "start": start, "sortby": "date_desc"})
+        page = call({} if start == 0 else {"start": start})
         batch = page.get("reviews", [])
         reviews += [map_serpapi_review(r, hidden=False) for r in batch]
         if not (page.get("serpapi_pagination") or {}).get("next") or not batch:
