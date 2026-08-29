@@ -19,7 +19,7 @@
     ".yrw a{border-bottom:none;text-decoration:none}",
     ".yrw-body{position:relative}",
     ".yrw-track{display:flex;gap:var(--yrw-gap);overflow-x:auto;scroll-snap-type:x mandatory;",
-    "  scrollbar-width:none;-ms-overflow-style:none;padding:2px;scroll-behavior:smooth}",
+    "  scrollbar-width:none;-ms-overflow-style:none;padding:2px 0;scroll-behavior:smooth}",
     "@media (prefers-reduced-motion:reduce){.yrw-track{scroll-behavior:auto}}",
     ".yrw-track::-webkit-scrollbar{display:none}",
     /* card: flat light-gray, subtle radius, no border (per live widget) */
@@ -212,10 +212,48 @@
       });
     }
 
+    // Absolute-index navigation: every arrow/dot action targets an exact card
+    // offset. Relative scrollBy compounded mid-animation positions and let
+    // snap heuristics pick the landing card (partial cards, skips).
+    var curIdx = 0;
+    var lastNav = 0;
+    function cardOffset(i) {
+      var c = track.children[i];
+      return c ? c.offsetLeft - track.children[0].offsetLeft : 0;
+    }
+    function maxScrollLeft() {
+      return Math.max(0, track.scrollWidth - track.clientWidth);
+    }
+    function nearestIdx() {
+      var sl = track.scrollLeft, best = 0, bd = Infinity;
+      for (var i = 0; i < track.children.length; i++) {
+        var d = Math.abs(cardOffset(i) - sl);
+        if (d < bd) { bd = d; best = i; }
+      }
+      return best;
+    }
+    function goTo(i) {
+      var maxL = maxScrollLeft();
+      var last = track.children.length - 1;
+      i = Math.max(0, Math.min(last, i));
+      var left = Math.min(cardOffset(i), maxL);
+      // don't let i overshoot into positions that can't scroll further
+      while (i > 0 && cardOffset(i - 1) >= maxL) i--;
+      curIdx = i;
+      lastNav = Date.now();
+      track.scrollTo({ left: left });
+    }
+
     var prev = el("div", "yrw-arrow yrw-prev");
     var next = el("div", "yrw-arrow yrw-next");
-    btnize(prev, "Previous reviews", function () { collapseAll(); track.scrollBy({ left: -cardStep() }); });
-    btnize(next, "Next reviews", function () { collapseAll(); track.scrollBy({ left: cardStep() }); });
+    function rebase() {
+      // if the real position is more than a card away from the logical index
+      // (user swiped), navigate relative to what's actually on screen
+      var step = cardStep() || 1;
+      if (Math.abs(track.scrollLeft - cardOffset(curIdx)) > step * 0.75) curIdx = nearestIdx();
+    }
+    btnize(prev, "Previous reviews", function () { collapseAll(); rebase(); goTo(curIdx - 1); });
+    btnize(next, "Next reviews", function () { collapseAll(); rebase(); goTo(curIdx + 1); });
     prev.appendChild(svg("0 0 22 22", CHEV_L));
     next.appendChild(svg("0 0 22 22", CHEV_R));
     body.appendChild(prev);
@@ -231,8 +269,7 @@
       var d = el("div", "yrw-dot");
       btnize(d, "Go to review " + (i + 1), function () {
         collapseAll();
-        var card = track.children[i];
-        if (card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft });
+        goTo(i);
       });
       strip.appendChild(d);
     });
@@ -261,6 +298,7 @@
         dots.style.display = noScroll ? "none" : "flex";
         var step = cardStep() || 1;
         var idx = Math.round(track.scrollLeft / step);
+        if (Date.now() - lastNav > 600) curIdx = idx;
         Array.prototype.forEach.call(strip.children, function (d, i) {
           d.classList.toggle("on", i === idx);
           d.classList.toggle("near", Math.abs(i - idx) === 1);
