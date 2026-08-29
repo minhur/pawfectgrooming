@@ -113,6 +113,32 @@ def main() -> int:
     page = open(args.html, errors="ignore").read() if args.html else fetch(YAHOO_URL)
     data = parse(page)
 
+    # Merge guard: never downgrade an existing review's data. The widget JSON
+    # may hold FULL texts and avatar URLs captured from the live widget DOM;
+    # syndication only has ~160-char excerpts and no avatars. Match by hrid.
+    if prev:
+        by_hrid = {}
+        for pr in prev.get("reviews", []):
+            m = re.search(r"hrid=([A-Za-z0-9_-]+)", pr.get("url", ""))
+            if m:
+                by_hrid[m.group(1)] = pr
+        for r in data["reviews"]:
+            m = re.search(r"hrid=([A-Za-z0-9_-]+)", r["url"])
+            old_r = by_hrid.get(m.group(1)) if m else None
+            if not old_r:
+                continue
+            if len(old_r.get("text", "")) > len(r.get("text", "")):
+                r["text"] = old_r["text"]
+            for k in ("avatar", "rating", "date"):
+                if old_r.get(k) is not None:
+                    r[k] = old_r[k]
+        # keep reviews that exist locally but fell out of the syndication window
+        have = {re.search(r"hrid=([A-Za-z0-9_-]+)", r["url"]).group(1) for r in data["reviews"]}
+        for h, pr in by_hrid.items():
+            if h not in have:
+                data["reviews"].append(pr)
+        data["reviews"].sort(key=lambda r: r["date"], reverse=True)
+
     # Rating honesty guard: never display a rating that overstates yelp.com.
     # Syndication rounds (Yahoo showed 5.0 while yelp.com showed 4.9), so the
     # official rating, once set, wins over the syndicated one.

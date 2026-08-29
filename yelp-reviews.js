@@ -1,90 +1,71 @@
 /*!
- * yelp-reviews.js — self-hosted Yelp reviews widget (Elfsight replacement)
- * Zero dependencies. Embed:
+ * yelp-reviews.js — self-hosted Yelp reviews widget
+ * CX replica of the Elfsight Yelp Reviews carousel (classic template) built
+ * from the live widget's rendered DOM and pixels (2026-08-28), minus branding.
+ *
+ * Embed:
  *   <script src="yelp-reviews.js" defer></script>
  *   <div data-yelp-reviews data-src="yelp-reviews.json"></div>
- * Options on the div:
- *   data-src="path/to/reviews.json"   (default: yelp-reviews.json)
- *   data-layout="carousel|grid"       (default: carousel)
- * Or inline data (no extra request):
- *   <div data-yelp-reviews><script type="application/json">{...}</script></div>
  */
 (function () {
   "use strict";
 
-  var YELP_RED = "#d32323";
-
-  // Font Awesome Free 6.5.2 "yelp" brand icon (CC BY 4.0) — viewBox 0 0 384 512
-  var YELP_PATH = "M42.9 240.32l99.62 48.61c19.2 9.4 16.2 37.51-4.5 42.71L30.5 358.45a22.79 22.79 0 0 1-28.21-19.6 197.16 197.16 0 0 1 9-85.32 22.8 22.8 0 0 1 31.61-13.21zm44 239.25a199.45 199.45 0 0 0 79.42 32.11A22.78 22.78 0 0 0 192.94 490l3.9-110.82c.7-21.3-25.5-31.91-39.81-16.1l-74.21 82.4a22.82 22.82 0 0 0 4.09 34.09zm145.34-109.92l58.81 94a22.93 22.93 0 0 0 34 5.5 198.36 198.36 0 0 0 52.71-67.61A23 23 0 0 0 364.17 370l-105.42-34.26c-20.31-6.5-37.81 15.8-26.51 33.91zm148.33-132.23a197.44 197.44 0 0 0-50.41-69.31 22.85 22.85 0 0 0-34 4.4l-62 91.92c-11.9 17.7 4.7 40.61 25.2 34.71L366 268.63a23 23 0 0 0 14.61-31.21zM62.11 30.18a22.86 22.86 0 0 0-9.9 32l104.12 180.44c11.7 20.2 42.61 11.9 42.61-11.4V22.88a22.67 22.67 0 0 0-24.5-22.8 320.37 320.37 0 0 0-112.33 30.1z";
-
   var CSS = [
-    ".yrw{--yrw-accent:" + YELP_RED + ";--yrw-text:#333;--yrw-muted:#8a8a8a;--yrw-card-bg:#fff;",
-    "  --yrw-border:#e6e6e6;--yrw-star-empty:#dcdcdc;--yrw-per-view:3;--yrw-gap:16px;",
-    "  font-family:inherit;color:var(--yrw-text);margin:1.5em 0;text-align:left}",
+    /* palette measured from the live Elfsight render */
+    ".yrw{--yrw-star:#fcbf02;--yrw-yelp:#d32323;--yrw-card:#f8f8f8;--yrw-name:#222;",
+    "  --yrw-text:#7a7a7a;--yrw-mut:#9b9b9b;--yrw-per-view:3;--yrw-gap:20px;",
+    "  font-family:inherit;margin:1.5em 0;text-align:left;position:relative}",
     ".yrw *{box-sizing:border-box}",
-    ".yrw a{color:inherit;border-bottom:none}",
-    /* header */
-    ".yrw-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px}",
-    ".yrw-head-left{display:flex;align-items:center;gap:14px}",
-    ".yrw-big{font-size:2.6em;font-weight:700;line-height:1;color:var(--yrw-text)}",
-    ".yrw-head-meta{display:flex;flex-direction:column;gap:4px}",
-    ".yrw-count{font-size:.9em;color:var(--yrw-muted)}",
-    ".yrw-count a{text-decoration:underline;text-underline-offset:2px}",
-    ".yrw-brand{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--yrw-accent);font-size:.95em}",
-    ".yrw-brand svg{width:1.15em;height:1.15em;fill:var(--yrw-accent)}",
-    ".yrw-cta{display:inline-block;background:var(--yrw-accent);color:#fff !important;font-weight:600;",
-    "  font-size:.85em;letter-spacing:.02em;padding:.75em 1.4em;border-radius:6px;text-decoration:none;",
-    "  box-shadow:none;border:0;transition:filter .15s}",
-    ".yrw-cta:hover{filter:brightness(1.1);color:#fff}",
-    /* stars */
-    ".yrw-stars{position:relative;display:inline-block;line-height:0}",
-    ".yrw-stars svg{width:1.1em;height:1.1em;display:inline-block}",
-    ".yrw-stars-bg svg{fill:var(--yrw-star-empty)}",
-    ".yrw-stars-fg{position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap}",
-    ".yrw-stars-fg svg{fill:var(--yrw-accent)}",
-    ".yrw-head .yrw-stars svg{width:1.35em;height:1.35em}",
-    /* carousel */
+    ".yrw a{border-bottom:none;text-decoration:none}",
     ".yrw-body{position:relative}",
     ".yrw-track{display:flex;gap:var(--yrw-gap);overflow-x:auto;scroll-snap-type:x mandatory;",
-    "  scrollbar-width:none;-ms-overflow-style:none;padding:4px 2px 8px;scroll-behavior:smooth}",
+    "  scrollbar-width:none;-ms-overflow-style:none;padding:2px;scroll-behavior:smooth}",
     "@media (prefers-reduced-motion:reduce){.yrw-track{scroll-behavior:auto}}",
     ".yrw-track::-webkit-scrollbar{display:none}",
+    /* card: flat light-gray, subtle radius, no border (per live widget) */
     ".yrw-card{flex:0 0 calc((100% - (var(--yrw-per-view) - 1)*var(--yrw-gap))/var(--yrw-per-view));",
-    "  scroll-snap-align:start;background:var(--yrw-card-bg);border:1px solid var(--yrw-border);",
-    "  border-radius:10px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;flex-direction:column}",
-    ".yrw[data-layout=grid] .yrw-track{flex-wrap:wrap;overflow:visible}",
-    ".yrw[data-layout=grid] .yrw-arrow,.yrw[data-layout=grid] .yrw-dots{display:none}",
-    /* card innards */
-    ".yrw-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}",
-    ".yrw-avatar{width:42px;height:42px;border-radius:50%;color:#fff;font-weight:700;font-size:.95em;",
-    "  display:flex;align-items:center;justify-content:center;flex:0 0 42px;user-select:none}",
-    ".yrw-who{min-width:0;flex:1}",
-    ".yrw-name{font-weight:700;font-size:.95em;color:var(--yrw-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}",
-    ".yrw-date{font-size:.78em;color:var(--yrw-muted)}",
-    ".yrw-card-yelp{flex:0 0 auto}",
-    ".yrw-card-yelp svg{width:1em;height:1em;fill:var(--yrw-accent);opacity:.9}",
-    ".yrw-card .yrw-stars{margin:2px 0 8px}",
-    ".yrw-text{font-size:.9em;line-height:1.55;color:var(--yrw-text);margin:0;",
-    "  display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}",
-    ".yrw-more{margin-top:auto;padding-top:10px;font-size:.82em;font-weight:600;color:var(--yrw-accent) !important;",
-    "  text-decoration:none;align-self:flex-start}",
-    ".yrw-more:hover{text-decoration:underline}",
-    /* arrows + dots (all:unset shields them from host-page button styling) */
-    ".yrw-arrow{all:unset;position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;",
-    "  border:1px solid var(--yrw-border);background:#fff;color:#555;cursor:pointer;z-index:2;",
-    "  display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.12);",
-    "  transition:opacity .15s;font-size:16px;line-height:1;padding:0;box-sizing:border-box;text-align:center}",
-    ".yrw-arrow[disabled]{opacity:.25;cursor:default}",
-    ".yrw-prev{left:-14px}.yrw-next{right:-14px}",
-    ".yrw-dots{display:flex;justify-content:center;gap:7px;margin-top:12px}",
-    ".yrw-dot{all:unset;box-sizing:border-box;display:inline-block;width:8px;height:8px;border-radius:50%;",
-    "  background:#d5d5d5;cursor:pointer;transition:background .15s}",
-    ".yrw-dot.on{background:var(--yrw-accent)}",
-    /* per-view is set from container width in JS (media queries can't see container) */
-    "@media (max-width:560px){.yrw-prev{left:-6px}.yrw-next{right:-6px}}"
+    "  scroll-snap-align:start;background:var(--yrw-card);border-radius:6px;padding:20px;",
+    "  display:flex;flex-direction:column;align-items:flex-start}",
+    /* author row */
+    ".yrw-top{display:flex;align-items:center;gap:10px;width:100%}",
+    ".yrw-ava{width:40px;height:40px;border-radius:50%;flex:0 0 40px;overflow:hidden;background:#d8d8d8;",
+    "  display:flex;align-items:center;justify-content:center}",
+    ".yrw-ava img{width:100%;height:100%;object-fit:cover;display:block}",
+    ".yrw-ava svg{width:20px;height:20px;fill:#fff}",
+    ".yrw-who{min-width:0}",
+    ".yrw-name{display:flex;align-items:center;gap:5px;font-size:.85em;font-weight:700;color:var(--yrw-name);line-height:1.3}",
+    ".yrw-name .yrw-badge{width:.9em;height:.9em;display:inline-block}",
+    ".yrw-name .yrw-badge svg{width:100%;height:100%;fill:var(--yrw-yelp);display:block}",
+    ".yrw-name .yrw-badge{width:1em;height:1em}",
+    ".yrw-date{font-size:.72em;color:var(--yrw-mut);margin-top:1px}",
+    ".yrw-date a{color:var(--yrw-yelp)}",
+    ".yrw-date a:hover{text-decoration:underline}",
+    /* stars: orange-gold, prominent, tight row */
+    ".yrw-stars{display:flex;gap:0;margin:12px 0 10px;line-height:0}",
+    ".yrw-stars svg{width:18px;height:18px;fill:var(--yrw-star);stroke:var(--yrw-star);stroke-width:2.4;stroke-linejoin:round;margin-right:1px}",
+    ".yrw-stars svg.off{fill:#dcdcdc}",
+    /* review text: clamped, gray */
+    ".yrw-text{font-size:.84em;line-height:1.5;color:var(--yrw-text);margin:0;width:100%;",
+    "  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}",
+    ".yrw-card.open .yrw-text{display:block;-webkit-line-clamp:unset;overflow:visible}",
+    /* inline expander (matches es-text-shortener-control) */
+    ".yrw-more{all:unset;box-sizing:border-box;margin-top:8px;font-size:.78em;color:var(--yrw-mut);cursor:pointer;font-family:inherit;line-height:1.4;display:none;border:0;text-decoration:none}",
+    ".yrw-more.show{display:inline-block}",
+    ".yrw-more:hover{color:var(--yrw-text)}",
+    /* arrows: dark circle, white chevron, overlapping edge (per live widget) */
+    ".yrw-arrow{all:unset;box-sizing:border-box;position:absolute;top:50%;transform:translateY(-50%);",
+    "  width:38px;height:38px;border-radius:50%;background:#3f3f3f;color:#fff;cursor:pointer;z-index:2;",
+    "  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25);text-align:center}",
+    ".yrw-arrow svg{width:14px;height:14px;fill:#fff}",
+    ".yrw-arrow[data-hidden=\"1\"]{display:none}",
+    ".yrw-prev{left:-12px}.yrw-next{right:-12px}",
+    "@media (max-width:560px){.yrw-prev{left:-6px}.yrw-next{right:-6px}}",
+    /* bullets */
+    ".yrw-dots{display:flex;justify-content:center;gap:6px;margin-top:14px}",
+    ".yrw-dot{all:unset;box-sizing:border-box;display:inline-block;width:7px;height:7px;border-radius:50%;",
+    "  background:#d3d3d3;cursor:pointer}",
+    ".yrw-dot.on{background:#7a7a7a}"
   ].join("\n");
-
-  var AVATAR_COLORS = ["#7f6de0", "#e06d8f", "#4aa3a2", "#c98a4b", "#5b8dd6", "#8a67ab", "#5aa469", "#d0716d"];
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -93,153 +74,134 @@
     return n;
   }
 
-  function yelpSvg() {
+  function svg(vb, d) {
     var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    s.setAttribute("viewBox", "0 0 384 512");
+    s.setAttribute("viewBox", vb);
     s.setAttribute("aria-hidden", "true");
     var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    p.setAttribute("d", YELP_PATH);
+    p.setAttribute("d", d);
     s.appendChild(p);
     return s;
   }
+  var STAR = "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z";
+  var PERSON = "M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z";
+  var CHECK_BADGE = "M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm-1.7 15.5l-4-4 1.6-1.6 2.4 2.4 5.8-5.8 1.6 1.6-7.4 7.4z";
+  var CHEV_L = "M15.4 4.6L14 3.2 6.2 11l7.8 7.8 1.4-1.4L9 11z";
+  var CHEV_R = "M8.6 4.6L10 3.2l7.8 7.8-7.8 7.8-1.4-1.4L14 11z";
 
-  function starSvg() {
-    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    s.setAttribute("viewBox", "0 0 24 24");
-    s.setAttribute("aria-hidden", "true");
-    var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    p.setAttribute("d", "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z");
-    s.appendChild(p);
-    return s;
+  function btnize(n, label, onAct) {
+    n.setAttribute("role", "button");
+    n.setAttribute("tabindex", "0");
+    if (label) n.setAttribute("aria-label", label);
+    n.addEventListener("click", onAct);
+    n.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onAct(e); }
+    });
+    return n;
   }
 
-  function starRow(rating) {
-    var wrap = el("span", "yrw-stars");
-    wrap.setAttribute("role", "img");
-    wrap.setAttribute("aria-label", "Rated " + rating + " out of 5");
-    var bg = el("span", "yrw-stars-bg");
-    var fg = el("span", "yrw-stars-fg");
-    for (var i = 0; i < 5; i++) { bg.appendChild(starSvg()); fg.appendChild(starSvg()); }
-    fg.style.width = Math.max(0, Math.min(100, rating / 5 * 100)) + "%";
-    wrap.appendChild(bg);
-    wrap.appendChild(fg);
-    return wrap;
-  }
-
-  function initials(name) {
-    var parts = String(name || "?").trim().split(/\s+/);
-    var a = (parts[0] || "?").charAt(0);
-    var b = parts.length > 1 ? parts[parts.length - 1].charAt(0) : "";
-    return (a + b).toUpperCase().replace(/\./g, "");
-  }
-
-  function avatarColor(name) {
-    var h = 0;
-    for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
-    return AVATAR_COLORS[h % AVATAR_COLORS.length];
-  }
-
-  function relDate(iso) {
+  function fmtDate(iso) {
     var d = new Date(iso + "T12:00:00");
     if (isNaN(d)) return iso;
-    var days = Math.floor((Date.now() - d.getTime()) / 86400000);
-    if (days < 1) return "today";
-    if (days === 1) return "a day ago";
-    if (days < 7) return days + " days ago";
-    if (days < 14) return "a week ago";
-    if (days < 45) return Math.round(days / 7) + " weeks ago";
-    return d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+    var opts = { month: "long", day: "numeric" };
+    if (d.getFullYear() !== new Date().getFullYear()) opts.year = "numeric";
+    return d.toLocaleDateString("en-US", opts);
   }
 
   function render(root, data) {
-    var biz = data.business || {};
     var reviews = data.reviews || [];
     root.classList.add("yrw");
-    if (!root.getAttribute("data-layout")) root.setAttribute("data-layout", "carousel");
 
-    // ---- header
-    var head = el("div", "yrw-head");
-    var left = el("div", "yrw-head-left");
-    left.appendChild(el("div", "yrw-big", (biz.rating != null ? biz.rating.toFixed(1) : "")));
-    var meta = el("div", "yrw-head-meta");
-    meta.appendChild(starRow(biz.rating || 0));
-    var count = el("div", "yrw-count");
-    var brand = el("a", "yrw-brand");
-    brand.href = biz.url || "#";
-    brand.target = "_blank";
-    brand.rel = "noopener";
-    brand.appendChild(yelpSvg());
-    brand.appendChild(document.createTextNode("Yelp"));
-    var countLink = el("a", null, "Based on " + (biz.review_count || reviews.length) + " reviews");
-    countLink.href = biz.url || "#";
-    countLink.target = "_blank";
-    countLink.rel = "noopener";
-    count.appendChild(countLink);
-    count.appendChild(document.createTextNode("\u00a0on\u00a0"));
-    count.appendChild(brand);
-    meta.appendChild(count);
-    left.appendChild(meta);
-    head.appendChild(left);
-    if (biz.write_review_url) {
-      var cta = el("a", "yrw-cta", "Review us on Yelp");
-      cta.href = biz.write_review_url;
-      cta.target = "_blank";
-      cta.rel = "noopener";
-      head.appendChild(cta);
-    }
-    root.appendChild(head);
-
-    // ---- cards
     var body = el("div", "yrw-body");
     var track = el("div", "yrw-track");
     track.setAttribute("aria-label", "Yelp reviews");
+
     reviews.forEach(function (r) {
       var card = el("article", "yrw-card");
-      var top = el("div", "yrw-card-top");
-      var av = el("div", "yrw-avatar", initials(r.author));
-      av.style.background = avatarColor(r.author || "");
-      av.setAttribute("aria-hidden", "true");
-      top.appendChild(av);
-      var who = el("div", "yrw-who");
-      who.appendChild(el("div", "yrw-name", r.author || "Yelp user"));
-      who.appendChild(el("div", "yrw-date", relDate(r.date)));
-      top.appendChild(who);
-      var mark = el("a", "yrw-card-yelp");
-      mark.href = r.url || biz.url || "#";
-      mark.target = "_blank";
-      mark.rel = "noopener";
-      mark.setAttribute("aria-label", "View this review on Yelp");
-      mark.appendChild(yelpSvg());
-      top.appendChild(mark);
-      card.appendChild(top);
-      card.appendChild(starRow(r.rating != null ? r.rating : 5));
-      card.appendChild(el("p", "yrw-text", r.text || ""));
-      if (r.url) {
-        var more = el("a", "yrw-more", "Read more");
-        more.href = r.url;
-        more.target = "_blank";
-        more.rel = "noopener";
-        card.appendChild(more);
+
+      var top = el("div", "yrw-top");
+      var avaLink = el("a", "yrw-ava-link");
+      avaLink.href = r.url || "#";
+      avaLink.target = "_blank";
+      avaLink.rel = "noopener";
+      var ava = el("span", "yrw-ava");
+      if (r.avatar) {
+        var img = document.createElement("img");
+        img.loading = "lazy";
+        img.src = r.avatar;
+        img.alt = r.author || "";
+        img.onerror = function () { ava.textContent = ""; ava.appendChild(svg("0 0 24 24", PERSON)); };
+        ava.appendChild(img);
+      } else {
+        ava.appendChild(svg("0 0 24 24", PERSON));
       }
+      avaLink.appendChild(ava);
+      top.appendChild(avaLink);
+
+      var who = el("div", "yrw-who");
+      var nameLink = el("a");
+      nameLink.href = r.url || "#";
+      nameLink.target = "_blank";
+      nameLink.rel = "noopener";
+      var name = el("span", "yrw-name");
+      name.appendChild(document.createTextNode(r.author || "Yelp user"));
+      var badge = el("span", "yrw-badge");
+      badge.appendChild(svg("0 0 24 24", CHECK_BADGE));
+      name.appendChild(badge);
+      nameLink.appendChild(name);
+      nameLink.style.color = "inherit";
+      who.appendChild(nameLink);
+
+      var date = el("div", "yrw-date");
+      date.appendChild(document.createTextNode(fmtDate(r.date) + " on "));
+      var ylink = el("a", null, "Yelp");
+      ylink.href = r.url || "#";
+      ylink.target = "_blank";
+      ylink.rel = "noopener";
+      date.appendChild(ylink);
+      who.appendChild(date);
+      top.appendChild(who);
+      card.appendChild(top);
+
+      var stars = el("div", "yrw-stars");
+      stars.setAttribute("role", "img");
+      var rating = r.rating != null ? r.rating : 5;
+      stars.setAttribute("aria-label", "Rated " + rating + " out of 5");
+      for (var i = 1; i <= 5; i++) {
+        var st = svg("0 0 24 24", STAR);
+        if (i > rating) st.setAttribute("class", "off");
+        stars.appendChild(st);
+      }
+      card.appendChild(stars);
+
+      var txt = el("p", "yrw-text", r.text || "");
+      card.appendChild(txt);
+
+      var more = el("div", "yrw-more", "Read more");
+      btnize(more, null, function () {
+        var open = card.classList.toggle("open");
+        more.textContent = open ? "Show less" : "Read more";
+      });
+      card.appendChild(more);
+
       track.appendChild(card);
     });
     body.appendChild(track);
 
-    // ---- arrows + dots (carousel only)
-    var prev = el("button", "yrw-arrow yrw-prev", "\u2039");
-    var next = el("button", "yrw-arrow yrw-next", "\u203a");
-    prev.type = next.type = "button";
-    prev.setAttribute("aria-label", "Previous reviews");
-    next.setAttribute("aria-label", "Next reviews");
+    var prev = el("div", "yrw-arrow yrw-prev");
+    var next = el("div", "yrw-arrow yrw-next");
+    btnize(prev, "Previous reviews", function () { track.scrollBy({ left: -cardStep() }); });
+    btnize(next, "Next reviews", function () { track.scrollBy({ left: cardStep() }); });
+    prev.appendChild(svg("0 0 22 22", CHEV_L));
+    next.appendChild(svg("0 0 22 22", CHEV_R));
     body.appendChild(prev);
     body.appendChild(next);
     root.appendChild(body);
+
     var dots = el("div", "yrw-dots");
     reviews.forEach(function (_, i) {
-      var d = el("button", "yrw-dot");
-      d.type = "button";
-      d.setAttribute("aria-label", "Go to review " + (i + 1));
-      d.addEventListener("click", function () {
+      var d = el("div", "yrw-dot");
+      btnize(d, "Go to review " + (i + 1), function () {
         var card = track.children[i];
         if (card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft });
       });
@@ -250,12 +212,9 @@
     function cardStep() {
       var c = track.children[0];
       if (!c) return 0;
-      var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 16;
+      var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 20;
       return c.getBoundingClientRect().width + gap;
     }
-    prev.addEventListener("click", function () { track.scrollBy({ left: -cardStep() }); });
-    next.addEventListener("click", function () { track.scrollBy({ left: cardStep() }); });
-
     var raf = null;
     function sync() {
       if (raf) return;
@@ -264,21 +223,29 @@
         var w = root.clientWidth;
         root.style.setProperty("--yrw-per-view", w > 840 ? 3 : w > 520 ? 2 : 1);
         var max = track.scrollWidth - track.clientWidth;
-        prev.disabled = track.scrollLeft <= 2;
-        next.disabled = track.scrollLeft >= max - 2;
         var noScroll = max <= 4;
-        prev.style.display = next.style.display = noScroll ? "none" : "flex";
+        prev.setAttribute("data-hidden", (noScroll || track.scrollLeft <= 2) ? "1" : "0");
+        next.setAttribute("data-hidden", (noScroll || track.scrollLeft >= max - 2) ? "1" : "0");
         dots.style.display = noScroll ? "none" : "flex";
         var step = cardStep() || 1;
         var idx = Math.round(track.scrollLeft / step);
         Array.prototype.forEach.call(dots.children, function (d, i) {
           d.classList.toggle("on", i === idx);
         });
+        // show Read more only when the text is actually clamped
+        Array.prototype.forEach.call(track.children, function (card) {
+          var t = card.querySelector(".yrw-text");
+          var m = card.querySelector(".yrw-more");
+          if (!t || !m) return;
+          if (card.classList.contains("open") || t.scrollHeight > t.clientHeight + 2) m.classList.add("show");
+          else m.classList.remove("show");
+        });
       });
     }
     track.addEventListener("scroll", sync, { passive: true });
     window.addEventListener("resize", sync);
     sync();
+    setTimeout(sync, 60);
   }
 
   function boot(target) {
@@ -305,8 +272,7 @@
       st.textContent = CSS;
       document.head.appendChild(st);
     }
-    var targets = document.querySelectorAll("[data-yelp-reviews]");
-    Array.prototype.forEach.call(targets, boot);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-yelp-reviews]"), boot);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
