@@ -55,12 +55,12 @@
     ".yrw-more:hover{color:var(--yrw-text)}",
     /* arrows: dark circle, white chevron, overlapping edge (per live widget) */
     ".yrw-arrow{all:unset;box-sizing:border-box;position:absolute;top:50%;transform:translateY(-50%);",
-    "  width:38px;height:38px;border-radius:50%;background:#3f3f3f;color:#fff;cursor:pointer;z-index:2;",
+    "  width:32px;height:32px;border-radius:50%;background:#3f3f3f;color:#fff;cursor:pointer;z-index:2;",
     "  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25);text-align:center}",
-    ".yrw-arrow svg{width:14px;height:14px;fill:#fff}",
+    ".yrw-arrow svg{width:12px;height:12px;fill:#fff}",
     ".yrw-arrow[data-hidden=\"1\"]{display:none}",
-    ".yrw-prev{left:-12px}.yrw-next{right:-12px}",
-    "@media (max-width:560px){.yrw-prev{left:-6px}.yrw-next{right:-6px}}",
+    ".yrw-prev{left:-16px}.yrw-next{right:-16px}",
+    "@media (max-width:560px){.yrw-arrow{width:28px;height:28px}.yrw-prev{left:-14px}.yrw-next{right:-14px}}",
     /* bullets: sliding dynamic window (swiper-style), scales to any count */
     ".yrw-dots{display:flex;justify-content:center;margin-top:14px}",
     ".yrw-dots-vp{overflow:hidden}",
