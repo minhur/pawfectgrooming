@@ -34,9 +34,9 @@
     ".yrw-ava svg{width:20px;height:20px;fill:#fff}",
     ".yrw-who{min-width:0}",
     ".yrw-name{display:flex;align-items:center;gap:5px;font-size:.85em;font-weight:700;color:var(--yrw-name);line-height:1.3}",
-    ".yrw-name .yrw-badge{width:.9em;height:.9em;display:inline-block}",
+    ".yrw-name .yrw-badge{width:1em;height:1em;display:inline-block}",
     ".yrw-name .yrw-badge svg{width:100%;height:100%;fill:var(--yrw-yelp);display:block}",
-    ".yrw-name .yrw-badge{width:1em;height:1em}",
+    ".yrw-name .yrw-badge svg .yrw-badge-chk{fill:#fff}",
     ".yrw-date{font-size:.72em;color:var(--yrw-mut);margin-top:1px}",
     ".yrw-date a{color:var(--yrw-yelp)}",
     ".yrw-date a:hover{text-decoration:underline}",
@@ -90,7 +90,8 @@
   }
   var STAR = "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z";
   var PERSON = "M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z";
-  var CHECK_BADGE = "M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm-1.7 15.5l-4-4 1.6-1.6 2.4 2.4 5.8-5.8 1.6 1.6-7.4 7.4z";
+  var BADGE_SEAL = "M6.757.236a.35.35 0 0 1 .486 0l1.106 1.07a.35.35 0 0 0 .329.089l1.493-.375a.35.35 0 0 1 .422.244l.422 1.48a.35.35 0 0 0 .24.24l1.481.423a.35.35 0 0 1 .244.422l-.375 1.493a.35.35 0 0 0 .088.329l1.071 1.106a.35.35 0 0 1 0 .486l-1.07 1.106a.35.35 0 0 0-.089.329l.375 1.493a.35.35 0 0 1-.244.422l-1.48.422a.35.35 0 0 0-.24.24l-.423 1.481a.35.35 0 0 1-.422.244l-1.493-.375a.35.35 0 0 0-.329.088l-1.106 1.071a.35.35 0 0 1-.486 0l-1.106-1.07a.35.35 0 0 0-.329-.089l-1.493.375a.35.35 0 0 1-.422-.244l-.422-1.48a.35.35 0 0 0-.24-.24l-1.481-.423a.35.35 0 0 1-.244-.422l.375-1.493a.35.35 0 0 0-.088-.329L.236 7.243a.35.35 0 0 1 0-.486l1.07-1.106a.35.35 0 0 0 .089-.329L1.02 3.829a.35.35 0 0 1 .244-.422l1.48-.422a.35.35 0 0 0 .24-.24l.423-1.481a.35.35 0 0 1 .422-.244l1.493.375a.35.35 0 0 0 .329-.088L6.757.236Z";
+  var BADGE_CHECK = "M9.065 4.85a.644.644 0 0 1 .899 0 .615.615 0 0 1 .053.823l-.053.059L6.48 9.15a.645.645 0 0 1-.84.052l-.06-.052-1.66-1.527a.616.616 0 0 1 0-.882.645.645 0 0 1 .84-.052l.06.052 1.21 1.086 3.034-2.978Z";
   var CHEV_L = "M15.4 4.6L14 3.2 6.2 11l7.8 7.8 1.4-1.4L9 11z";
   var CHEV_R = "M8.6 4.6L10 3.2l7.8 7.8-7.8 7.8-1.4-1.4L14 11z";
 
@@ -151,7 +152,13 @@
       var name = el("span", "yrw-name");
       name.appendChild(document.createTextNode(r.author || "Yelp user"));
       var badge = el("span", "yrw-badge");
-      badge.appendChild(svg("0 0 24 24", CHECK_BADGE));
+      var bsvg = svg("0 0 14 14", BADGE_SEAL);
+      var chk = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      chk.setAttribute("d", BADGE_CHECK);
+      chk.setAttribute("fill-rule", "evenodd");
+      chk.setAttribute("class", "yrw-badge-chk");
+      bsvg.appendChild(chk);
+      badge.appendChild(bsvg);
       name.appendChild(badge);
       nameLink.appendChild(name);
       nameLink.style.color = "inherit";
