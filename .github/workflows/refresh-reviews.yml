@@ -3,7 +3,7 @@ name: Refresh Yelp reviews
 on:
   schedule:
     - cron: "17 9 * * *"    # daily: FREE Yahoo freshness check; API pull only if new
-    - cron: "17 10 3 * *"   # monthly full sweep: unconditional pull (catches hidden-section changes Yahoo can't see)
+    - cron: "17 10 * * 1"   # weekly full sweep (Mon): unconditional pull, guarantees hidden-section coverage within ~a week
   workflow_dispatch:
     inputs:
       mode:
@@ -28,9 +28,9 @@ jobs:
           MODE: ${{ inputs.mode }}
         run: |
           # monthly sweep and manual full runs always pull
-          if [ "$SCHED" = "17 10 3 * *" ] || { [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$MODE" = "full" ]; }; then
+          if [ "$SCHED" = "17 10 * * 1" ] || { [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$MODE" = "full" ]; }; then
             echo "pull=yes" >> "$GITHUB_OUTPUT"
-            echo "unconditional pull (monthly sweep or manual full)"
+            echo "unconditional pull (weekly sweep or manual full)"
             exit 0
           fi
           # daily path: free Yahoo probe, no API quota. exit 0=same, 10=new
