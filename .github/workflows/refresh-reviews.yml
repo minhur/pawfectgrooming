@@ -2,8 +2,15 @@ name: Refresh Yelp reviews
 
 on:
   schedule:
-    - cron: "17 9 * * 1"   # weekly, Mondays 09:17 UTC (~13 SerpAPI searches/mo of 100 free)
-  workflow_dispatch: {}
+    - cron: "17 9 * * *"    # daily: FREE Yahoo freshness check; API pull only if new
+    - cron: "17 10 3 * *"   # monthly full sweep: unconditional pull (catches hidden-section changes Yahoo can't see)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "full = pull now; check = probe only"
+        default: "full"
+        type: choice
+        options: [full, check]
 
 permissions:
   contents: write
@@ -14,7 +21,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decide whether to pull
+        id: gate
+        env:
+          SCHED: ${{ github.event.schedule }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          # monthly sweep and manual full runs always pull
+          if [ "$SCHED" = "17 10 3 * *" ] || { [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$MODE" = "full" ]; }; then
+            echo "pull=yes" >> "$GITHUB_OUTPUT"
+            echo "unconditional pull (monthly sweep or manual full)"
+            exit 0
+          fi
+          # daily path: free Yahoo probe, no API quota. exit 0=same, 10=new
+          set +e
+          python3 fetch_reviews.py --check
+          rc=$?
+          set -e
+          if [ "$rc" -eq 0 ]; then
+            echo "pull=no" >> "$GITHUB_OUTPUT"
+          else
+            # 10 (new) or any failure: fail open -- a wasted pull costs ~3 searches, a missed review costs trust
+            echo "pull=yes" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Refresh review data
+        if: steps.gate.outputs.pull == 'yes'
         env:
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
         run: |
@@ -26,9 +58,12 @@ jobs:
           fi
 
       - name: Commit if changed
+        if: steps.gate.outputs.pull == 'yes'
         run: |
-          if git diff --quiet yelp-reviews.json; then
+          # ignore the fetched_at date bump: commit only on real content changes
+          if git diff -I '"fetched_at"' --quiet yelp-reviews.json; then
             echo "no review changes"
+            git checkout -- yelp-reviews.json
             exit 0
           fi
           git config user.name "review-refresh-bot"
