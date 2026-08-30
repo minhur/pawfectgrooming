@@ -7,7 +7,7 @@
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
     "review_count": 31
   },
-  "fetched_at": "2026-08-29",
+  "fetched_at": "2026-08-30",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
     {
