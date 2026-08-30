@@ -1,0 +1,38 @@
+name: Refresh Yelp reviews
+
+on:
+  schedule:
+    - cron: "17 9 * * 1"   # weekly, Mondays 09:17 UTC (~13 SerpAPI searches/mo of 100 free)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Refresh review data
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: |
+          if [ -n "$SERPAPI_KEY" ]; then
+            python3 fetch_reviews.py --serpapi "$SERPAPI_KEY"
+          else
+            echo "SERPAPI_KEY secret not set — falling back to Yahoo syndication"
+            python3 fetch_reviews.py
+          fi
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet yelp-reviews.json; then
+            echo "no review changes"
+            exit 0
+          fi
+          git config user.name "review-refresh-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add yelp-reviews.json
+          git commit -m "Refresh Yelp reviews ($(date -u +%F))"
+          git push
