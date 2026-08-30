@@ -227,6 +227,46 @@ def merge(prev_reviews: list, new_reviews: list) -> list:
     return dedup
 
 
+def check_new(prev: dict) -> int:
+    """Free freshness probe (no API quota): compare live Yahoo syndication
+    against the stored file. Exit 0 = SAME (skip the API pull), 10 = NEW.
+    Identity is hrid, else author+date, else author+text-prefix -- the text
+    fallback absorbs the known one-day date drift between Yahoo and Yelp."""
+    prev_reviews = prev.get("reviews", [])
+    prev_count = prev.get("business", {}).get("review_count")
+    page = http_get(YAHOO_URL)
+    new_reviews, _rating, count = parse_yahoo(page)
+
+    def norm(s: str) -> str:
+        return re.sub(r"\s+", " ", s or "").strip()
+
+    def texts_match(excerpt: str, full: str) -> bool:
+        probe = norm(excerpt).rstrip("\u2026. ")[:40]
+        return bool(probe) and probe in norm(full)
+
+    def known(r: dict) -> bool:
+        for p_ in prev_reviews:
+            if review_key(r) == review_key(p_):
+                return True
+            if r.get("author") == p_.get("author") and (
+                r.get("date") == p_.get("date")
+                or texts_match(r.get("text", ""), p_.get("text", ""))
+            ):
+                return True
+        return False
+
+    unseen = [r for r in new_reviews if not known(r)]
+    if count is not None and prev_count is not None and count != prev_count:
+        print(f"CHECK:NEW review_count changed {prev_count} -> {count}")
+        return 10
+    if unseen:
+        print("CHECK:NEW unseen review(s): "
+              + ", ".join(r.get("author", "?") for r in unseen))
+        return 10
+    print(f"CHECK:SAME count={count}, newest {len(new_reviews)} all known")
+    return 0
+
+
 # ------------------------------------------------------------------ main
 
 def main() -> int:
@@ -235,6 +275,8 @@ def main() -> int:
     ap.add_argument("--serpapi", metavar="API_KEY",
                     help="full pull (all recommended + hidden reviews) via SerpAPI")
     ap.add_argument("--html", help="parse a saved Yahoo Local HTML file")
+    ap.add_argument("--check", action="store_true",
+                    help="no-write freshness probe vs Yahoo; exit 0=same, 10=new")
     ap.add_argument("--min-rating", type=int, default=4,
                     help="only keep reviews rated >= this (default 4)")
     ap.add_argument("--rating", type=float,
@@ -249,6 +291,9 @@ def main() -> int:
             prev = json.load(f)
     except (OSError, ValueError):
         pass
+    if args.check:
+        return check_new(prev)
+
     prev_reviews = prev.get("reviews", [])
     prev_biz = prev.get("business", {})
 
