@@ -5,11 +5,18 @@
     "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
     "rating": 4.9,
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
-    "review_count": 31
+    "review_count": 34
   },
-  "fetched_at": "2026-08-30",
+  "fetched_at": "2026-09-14",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
+    {
+      "author": "Enzo W.",
+      "rating": 5,
+      "date": "2026-09-14",
+      "text": "My dog's over 100lbs and has a lot of undercoat. Mira always treats him amazing! She gets all of it out miraculously. It's a true blessing having her help me. Five stars every time for Pawfect Grooming",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+    },
     {
       "author": "Debbie P.",
       "rating": 5,
@@ -189,10 +196,24 @@
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
     },
     {
+      "author": "Vicki M.",
+      "rating": 5,
+      "date": "2025-05-23",
+      "text": "So soft. Professional and healthy.\nShe is amazing. Understand her reviews.\nLast minute decision for us.  Sooo happy we did!!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+    },
+    {
       "author": "Deloria G.",
       "rating": 5,
       "date": "2025-05-10",
       "text": "I took Nala to Pawfect grooming today. it is first time I took her to Mira.  My groomer has moved without notice   I was 100% pleased with her service.  Her place is clean and welcoming. She is very friendly and loving to my pet. \nmy Australian labradoodle is 11 months and 29 days today.  Tomorrow 1 year old and head to East Coast. \n\nShe got a treat. she has a lot anxiety and Mira was able to calm her and work with her.  Thank you for you professionalism and compassion for pets.    I made my return appointment, because I am well pleased.  I have a new groomer.    \nit is hard when you have a doodle.  \n\nThank you\nSandi",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+    },
+    {
+      "author": "Claire K.",
+      "rating": 5,
+      "date": "2025-05-08",
+      "text": "Amazing experience! my dogs look beautiful, and I could tell she put a lot of care and attention into their grooms. I appreciate the effort she put into making the process less stressful for them as well.",
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
     },
     {
