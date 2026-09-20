@@ -5,11 +5,18 @@
     "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
     "rating": 4.9,
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
-    "review_count": 34
+    "review_count": 35
   },
-  "fetched_at": "2026-09-14",
+  "fetched_at": "2026-09-20",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
+    {
+      "author": "Samin D.",
+      "rating": 5,
+      "date": "2026-09-19",
+      "text": "Mira is great! For the first appointment, she let me see how my dog was doing during the grooming process, which really helped me feel comfortable as an owner. Since my dog is scared of nail clippers, she uses a grinder instead, which I really appreciate.\n\nShe's always very quick, and my dog comes out looking absolutely adorable every time. I'm always so happy with the results!\n\nI'm originally from Japan, and it's honestly not easy to find a groomer in the U.S. who can give my dog such a cute, well-finished cut. I'm so glad I found Mira!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+    },
     {
       "author": "Enzo W.",
       "rating": 5,
