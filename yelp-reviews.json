@@ -5,11 +5,18 @@
     "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
     "rating": 4.9,
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
-    "review_count": 35
+    "review_count": 36
   },
-  "fetched_at": "2026-09-20",
+  "fetched_at": "2026-10-02",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
+    {
+      "author": "Maree B.",
+      "rating": 5,
+      "date": "2026-09-30",
+      "text": "Mira is a lifesaver for both me and my dog!\n\nMy small Cockapoo is 16 years old. She has difficulty walking and maintaining her balance, and she is deaf. At our previous grooming salon, her appointments took more than three hours, and she would come home completely exhausted. For a senior dog, spending more than three hours being groomed can be a lot.\n\nThat's when I decided to take her to Mira. We first went in just for ear care as a trial. She was quick, precise, and gentle, and she told me that she could complete a full grooming session in a much shorter time. So not long after, we went back for a full grooming.\n\nMira recommended a practical, sanitary haircut that would be less demanding for a senior dog. Since my dog cannot balance on her own, Mira continuously supported her on the grooming table, and she never fell.\n\nMy dog now has a hard time staying still for long periods, but Mira is incredibly patient and handles her with such care and understanding.\n\nShe is a wonderful groomer, and I feel completely comfortable trusting her with my senior dog. I'm so grateful we found her!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+    },
     {
       "author": "Samin D.",
       "rating": 5,
