@@ -5,9 +5,9 @@
     "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
     "rating": 4.9,
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
-    "review_count": 36
+    "review_count": 35
   },
-  "fetched_at": "2026-10-02",
+  "fetched_at": "2026-10-05",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
     {
