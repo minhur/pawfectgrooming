@@ -5,9 +5,9 @@
     "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
     "rating": 4.9,
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
-    "review_count": 35
+    "review_count": 36
   },
-  "fetched_at": "2026-10-05",
+  "fetched_at": "2026-10-12",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
     {
@@ -253,6 +253,13 @@
       "text": "So happy I found this groomer!! Super comfortable and my dog is super happy. Great experience and will be back!",
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
       "avatar": "https://s3-media0.fl.yelpcdn.com/photo/OI_EJhAa6WsdiRNpeDEiJA/180s.jpg"
+    },
+    {
+      "author": "Seong C.",
+      "rating": 5,
+      "date": "2025-04-17",
+      "text": "I visited this place for the first time after being introduced by acquaintance. \nShe was so kind and attractive to small details and did a great job.\nI was so impressed that \nI will visit again next time. \nThank you so much",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
     },
     {
       "author": "Soo Yeon P.",
