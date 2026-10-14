@@ -5,11 +5,19 @@
     "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
     "rating": 4.9,
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
-    "review_count": 36
+    "review_count": 37
   },
-  "fetched_at": "2026-10-12",
+  "fetched_at": "2026-10-14",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
+    {
+      "author": "Deepthi M.",
+      "rating": 5,
+      "date": "2026-10-14",
+      "text": "Mira did an amazing job with Zuko for his first groom with us. She was patient, precise, and perfect. We won't go anywhere else!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "avatar": "https://s3-media0.fl.yelpcdn.com/photo/7HFvT3d1gFiivxU_KgtXIw/180s.jpg"
+    },
     {
       "author": "Maree B.",
       "rating": 5,
