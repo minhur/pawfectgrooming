@@ -7,7 +7,7 @@
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
     "review_count": 37
   },
-  "fetched_at": "2026-10-14",
+  "fetched_at": "2026-10-26",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
     {
@@ -23,7 +23,8 @@
       "rating": 5,
       "date": "2026-09-30",
       "text": "Mira is a lifesaver for both me and my dog!\n\nMy small Cockapoo is 16 years old. She has difficulty walking and maintaining her balance, and she is deaf. At our previous grooming salon, her appointments took more than three hours, and she would come home completely exhausted. For a senior dog, spending more than three hours being groomed can be a lot.\n\nThat's when I decided to take her to Mira. We first went in just for ear care as a trial. She was quick, precise, and gentle, and she told me that she could complete a full grooming session in a much shorter time. So not long after, we went back for a full grooming.\n\nMira recommended a practical, sanitary haircut that would be less demanding for a senior dog. Since my dog cannot balance on her own, Mira continuously supported her on the grooming table, and she never fell.\n\nMy dog now has a hard time staying still for long periods, but Mira is incredibly patient and handles her with such care and understanding.\n\nShe is a wonderful groomer, and I feel completely comfortable trusting her with my senior dog. I'm so grateful we found her!",
-      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
     },
     {
       "author": "Samin D.",
@@ -85,6 +86,14 @@
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2?hrid=dRV14LjpCWZIGeLb2qBZ1A"
     },
     {
+      "author": "Min H.",
+      "rating": 5,
+      "date": "2026-06-01",
+      "text": "Mira at Pawfect Grooming has been grooming Cookie for the past year, and Cookie always looks perfectly groomed. Her skills are exceptional, and she handles dogs wonderfully. Cookie gets excited and runs right in whenever she sees Mira. I highly recommend her.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
       "author": "Eddie A.",
       "rating": 5,
       "date": "2026-05-10",
@@ -123,6 +132,71 @@
       "avatar": "https://s3-media0.fl.yelpcdn.com/photo/R27RVtj1IZD7ssOu2w92iA/180s.jpg"
     },
     {
+      "author": "Vicki S.",
+      "rating": 5,
+      "date": "2026-03-29",
+      "text": "My dog is very anxious about nail trims and baths. Mina has been so good about making the experience as positive as possible to build his trust. He is a big GSP and she handles him like the pro she is. I couldn't recommend her more.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "S C.",
+      "rating": 5,
+      "date": "2026-03-27",
+      "text": "My dog is nervous going for any type of grooming and as much as I would like to do it myself, it's just never good enough. I tried Pawfect for the first time recently and had such a great experience. The owner was so caring, patient, and thorough. She took care of a few mats that had developed on her bottom area that I wasn't even aware of. Highly recommend!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "avatar": "https://s3-media0.fl.yelpcdn.com/photo/fesQ9pmbRyyZcewEg6dEoQ/180s.jpg",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Gyes K.",
+      "rating": 5,
+      "date": "2026-03-06",
+      "text": "Mira is super sweet towards my dog, he gets anxious when people touch his paws for long periods of time but Mira is patient, friendly, and really careful with the sensitive parts of my dog so he is never in pain or bleeding. He is super thankful for the after treatment treats as well.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Rebecca R.",
+      "rating": 5,
+      "date": "2026-02-24",
+      "text": "She is amazing! She treats your pup like family and listens to any requests on preferred hairstyles for your fur baby. She is my #1 choice!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Melena Krownapple",
+      "rating": 5,
+      "date": "2026-01-26",
+      "text": "Turned out so well! She was incredibly welcoming and just a genuinely lovely person. It was clear that she truly cares for every dog as if they were her own, which made me feel completely at ease leaving my pup with her. I trusted that my dog was safe and well cared for the entire time. She went above and beyond with his haircut, and when I saw him afterward wearing his adorable collar, he was the most handsome boy ever! I couldn't be happier and will absolutely be back.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Jan Nelvin R.",
+      "rating": 5,
+      "date": "2026-01-21",
+      "text": "Mira is amazing! The transformation is fabulous. Great customer service and excellent skills! \n\nBefore and after pics.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Addie N.",
+      "rating": 5,
+      "date": "2026-01-14",
+      "text": "This business is the most incredible and underrated grooming company ever!!! i love it so much ! J'adore!!! . my baby girl came in looking so chopped and hideous my next stop wouldve been the pound, and she came out looking like the most miraculous little angel ever. 1000/10 review !!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Rosa F.",
+      "rating": 5,
+      "date": "2026-01-08",
+      "text": "My bf and I just moved states and we we're worried we wouldn't be able to find someone as caring and attentive as our groomer back home. It took us a little while looking into different groomers, but we finally picked Mira because all of the positive reviews and now our girls love going to her. She's so sweet and dedicated to a calming experience to the pups and always lets us know how they did.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
       "author": "Katie F.",
       "rating": 5,
       "date": "2026-01-07",
@@ -152,11 +226,77 @@
       "avatar": "https://s3-media0.fl.yelpcdn.com/photo/lQtzFZrhip5eylw6tz5d4g/180s.jpg"
     },
     {
+      "author": "Josh M.",
+      "rating": 5,
+      "date": "2025-11-04",
+      "text": "Been bringing my dogs here for a while and they always do a great job, just as I've requested. Mira is friendly, I'm a big fan and my dogs always look great after. Five stars!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "avatar": "https://s3-media0.fl.yelpcdn.com/photo/jc__JUavupjGIetLYo0zRA/180s.jpg",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Keiko G.",
+      "rating": 5,
+      "date": "2025-10-20",
+      "text": "I found my new go to groomer! Mira works on one dog at a time, so the appointments are very quick and efficient with no waiting time for your dog. She is so nice and gentle with my dog, who can sometimes be nervous. The haircuts are also always perfect. Couldn't be happier.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "sunny",
+      "rating": 5,
+      "date": "2025-10-17",
+      "text": "We love Joy's new look! Mira did an amazing job. Thanks for your kind caring professional service!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Aubrey B.",
+      "rating": 5,
+      "date": "2025-09-21",
+      "text": "Amazing service.  The groomer is kind, knowledgeable and explains everything to you. She took great care of my dogs and has a beautiful grooming space set up. I just moved to Washington and needed to find a groomer for my 2 Pomeranians   Pawfect Grooming  will be my go to!  10/10 recommend.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Damien V.",
+      "rating": 5,
+      "date": "2025-09-20",
+      "text": "i hesitate to leave a review because this place is the best secret on the east side.  First off Mira is awesome.  She does an excellent job, always greats Ash (50lb poodle) like her personal pet.  I love that this is a home based business.  There is only one dog there at a time.  The environment is chill and calm.  Even as home business this is not an \"improvised\" place.  She has all the appropriate hardware.  \nAsh is a service dog and I am an anxious new dog owner.  I feel really for to have found Mira!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Tiara B.",
+      "rating": 5,
+      "date": "2025-09-19",
+      "text": "Mira is a Miracle.   I really appreciate the time and care she took with our yorkie mix, Hachi. He was a severely matted shaggy dog due to financial hardship my family has been facing. Mira was not only understanding of our situation, but also took extra time to ensure his safety and comfort throughout the whole grooming session - something that meant a lot to my partner and I. We would definitely love to return in the near future. Thank you so much for helping Hachi!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "avatar": "https://s3-media0.fl.yelpcdn.com/photo/gN1pwOC_AS4HRBhh_rAhZQ/180s.jpg",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "A M.",
+      "rating": 5,
+      "date": "2025-09-11",
+      "text": "It was our first time bringing our dog to a private groomer since she is normally terrified to go back to the groomers at the big pet stores.  Mira was fantastic, caring and ensured that our dog was comfortable. She did an amazing job and provided outstanding customer service.  We are very glad that we found her and would highly recommend her to others.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
       "author": "Chloe B.",
       "rating": 5,
       "date": "2025-09-07",
       "text": "Mira is the BEST! She is so kind and gentle with my mini Schnauzer and his cut always turns out perfect! I love her space, it's safe and secure and my puppy is comfortable. He doesn't always do well around other dogs so being groomed one on one makes his experience much more pleasant. He also loves that Mira does playtime while waiting for us to pick him up! Do not hesitate to bring your furry companion here, they're in safe and caring hands",
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+    },
+    {
+      "author": "Candace L.",
+      "rating": 5,
+      "date": "2025-09-05",
+      "text": "My puppy 9 mos has gone to Pawferct Grooming 2 times and we are extremely happy with his experience and his haircutI'd recommend this company to anyone looking for a great groomer for their fur baby!  Her in home set up is clean, professional and also very dog friendly and welcoming.  I",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
     },
     {
       "author": "Avery E.",
@@ -180,6 +320,22 @@
       "text": "We had our first grooming with Mira today. The appointment process went well and in fact, Mira was accommodating when I had to move our appointment time to 30 mins later. \n\nMira has a great set up at home and this shows me how professional she is with her services. Since it was our first groom with her, she did take time to discuss the expectations of the grooming with me. \n\nTeddy has been on a regular schedule with our fav groomer over at Young's Pet Style but too bad they are permanently closed. I was on the lookout for another groomer when I came across Pawfect. We will be going back Mira at Pawfect again for Teddy!",
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
       "avatar": "https://s3-media0.fl.yelpcdn.com/photo/TXRFh5smMBItUEvkc6QlJQ/180s.jpg"
+    },
+    {
+      "author": "Chris L.",
+      "rating": 5,
+      "date": "2025-08-14",
+      "text": "Mira at Pawfect Grooming was outstanding. She worked quickly without compromising on quality, and both pets looked fantastic afterwards. Before starting, she made sure she fully understood the type of cut I wanted for each pet. Communication was excellent - I dropped the dog off, and two hours later she texted to say they were working on him, giving me a 20-minute heads-up before he was ready. Pleasant, professional, and easy to work with. She clearly takes great care with the animals and the service. Highly recommended.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Ali N.",
+      "rating": 5,
+      "date": "2025-08-10",
+      "text": "Very easy to get to because at her home, Mira was very nice and did a great job! Having it only be one dog there at a time was great because then there wasn't a lag in time where he was waiting locked up and focus was on him.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
     },
     {
       "author": "Sid S.",
@@ -218,11 +374,27 @@
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
     },
     {
+      "author": "Carli J.",
+      "rating": 5,
+      "date": "2025-06-27",
+      "text": "I took both of my dogs for grooming today and had a wonderful experience. Mira did an outstanding job with both of my pups. My mini Bernedoodle has a particularly challenging coat, and she exceeded all expectations. She also did a fantastic job grooming our Nova Scotia Duck Tolling Retriever. Mira is incredibly kind, and her home environment made both of my dogs feel at ease. Highly recommend!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
       "author": "Vicki M.",
       "rating": 5,
       "date": "2025-05-23",
       "text": "So soft. Professional and healthy.\nShe is amazing. Understand her reviews.\nLast minute decision for us.  Sooo happy we did!!",
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+    },
+    {
+      "author": "Patrice",
+      "rating": 5,
+      "date": "2025-05-18",
+      "text": "Pawfect grooming was very gentle and patient with my puppy! His first groom was a success, updates were provided throughout the appointment, and the appointment concluded as scheduled. I will certainly follow up for upcoming appointments.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
     },
     {
       "author": "Deloria G.",
@@ -239,12 +411,37 @@
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
     },
     {
+      "author": "晨阳",
+      "rating": 5,
+      "date": "2025-05-07",
+      "text": "My dog is even happier after the grooming.\nHe is in a good shape now and smells so good.",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Mengtian H.",
+      "rating": 5,
+      "date": "2025-04-27",
+      "text": "Highly recommend! Very great result and perfect grooming ! Great groomer and highly recommend to every small dog owner",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "avatar": "https://s3-media0.fl.yelpcdn.com/photo/UkUCH9pEVfie1x33NENn9g/180s.jpg",
+      "hidden_by_yelp": true
+    },
+    {
       "author": "Miyun K.",
       "rating": 5,
       "date": "2025-04-24",
       "text": "I'm a longtime friend of the owner, Mira. From what I know, she's incredibly skilled with her hands and truly loves and treasures dogs. She uses only gentle, high-quality products for bathing and puts great care into grooming. Please come and visit--your pets will be in the best hands!",
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
       "avatar": "https://s3-media0.fl.yelpcdn.com/photo/8QYWn_9anri1Z-4fET78pQ/180s.jpg"
+    },
+    {
+      "author": "Sarah W.",
+      "rating": 5,
+      "date": "2025-04-23",
+      "text": "Very good grooming salon for dogs! My dogs look super cute after grooming. Highly recommended to everyone",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
     },
     {
       "author": "Elizabeth P.",
@@ -283,6 +480,22 @@
       "text": "Highly recommend this grooming service for anyone looking in the Bellevue area!-Especially for a first grooming experience!\n\nShe has such a gentle touch and a warm heart. Each pup is treated with so much love and care, as if they were her own. The space is calm, clean, and welcoming--perfect for both pets and their humans. \n\nYou can feel that she loves what she does and puts her heart into every appointment.\n\nIf you're looking for someone you can completely trust with your furry friend, this is the place. Thank U",
       "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
       "avatar": "https://s3-media0.fl.yelpcdn.com/photo/S2uTQW8z07umV6h0Cs9pag/180s.jpg"
+    },
+    {
+      "author": "Grace K.",
+      "rating": 5,
+      "date": "2025-04-14",
+      "text": "My pup is usually very sensitive and hates grooming visits but she had wonderful time and was happy to go for her second visit! Mira was very friendly and also was really skilled with grooming. Highly recommended!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
+    },
+    {
+      "author": "Anna A.",
+      "rating": 5,
+      "date": "2025-04-12",
+      "text": "This isn't just a grooming shop -- it's a place where you can truly feel the love and care she has for dogs. Every time I bring my pup, I can tell she treats her with genuine kindness and patience. It's not just about making her look good, but also about making sure she feels safe and comfortable. I'm so grateful for the warm care she always shows!",
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
     }
   ]
 }
