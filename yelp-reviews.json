@@ -5,9 +5,9 @@
     "write_review_url": "https://www.yelp.com/writeareview/biz/IDhGAtyq6X7eYqP5ThIDqQ",
     "rating": 4.9,
     "rating_source": "yelp.com official page (2026-08-28); syndication rounds to 5.0 — official wins",
-    "review_count": 37
+    "review_count": 36
   },
-  "fetched_at": "2026-10-26",
+  "fetched_at": "2026-11-16",
   "source": "serpapi yelp_reviews (full texts, real ratings, incl. hidden)",
   "reviews": [
     {
@@ -386,7 +386,8 @@
       "rating": 5,
       "date": "2025-05-23",
       "text": "So soft. Professional and healthy.\nShe is amazing. Understand her reviews.\nLast minute decision for us.  Sooo happy we did!!",
-      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2"
+      "url": "https://www.yelp.com/biz/pawfect-grooming-bellevue-2",
+      "hidden_by_yelp": true
     },
     {
       "author": "Patrice",
